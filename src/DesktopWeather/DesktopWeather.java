@@ -1,6 +1,6 @@
 package DesktopWeather;
 
-public class DemoCommit {
+public class DesktopWeather {
     public static void main(String[] args) {
         
     }
