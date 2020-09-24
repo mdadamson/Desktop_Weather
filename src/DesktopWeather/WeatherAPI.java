@@ -86,7 +86,7 @@ public class WeatherAPI {
         this.countryCode = countryCode;
     }
     
-    /*
+    /**
      * Method allows externally created objects of this class to retrieve the "currentTemperature" property
      * from the "weather" Properties object.
      */
@@ -94,7 +94,7 @@ public class WeatherAPI {
     	return weather.getProperty("currentTemperature");
     }
     
-    /*
+    /**
      * Method allows externally created objects of this class to retrieve the "cityName" property
      * from the "weather" Properties object.
      */
