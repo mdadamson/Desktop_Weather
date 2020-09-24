@@ -85,6 +85,22 @@ public class WeatherAPI {
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
+    
+    /*
+     * Method allows externally created objects of this class to retrieve the "currentTemperature" property
+     * from the "weather" Properties object.
+     */
+    public String getTemperature() {
+    	return weather.getProperty("currentTemperature");
+    }
+    
+    /*
+     * Method allows externally created objects of this class to retrieve the "cityName" property
+     * from the "weather" Properties object.
+     */
+    public String getCityName() {
+    	return weather.getProperty("cityName");
+    }
 }
 
 /**
