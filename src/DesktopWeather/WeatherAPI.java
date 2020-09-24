@@ -1,5 +1,13 @@
 package DesktopWeather;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.net.URL;
+import java.util.Properties;
+
 public class WeatherAPI {
     private static final String API_KEY = "46d3fd23fd73595139bcc963739e3c3b";
     private static final String API_KEY_PHRASE = "&appid=" + API_KEY;
@@ -7,6 +15,7 @@ public class WeatherAPI {
     private static final String CALL_BY_ZIPCODE = "?zip=";
     private static final String DATA_FORMAT = "&mode=xml";
     private String urlCallAddress;
+    private UserHandler userHandler = new UserHandler();
     private String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
@@ -33,11 +42,13 @@ public class WeatherAPI {
     }
 
     /**
-     *
-     *
+     * Method creates and runs the SAX parser to read in XML data from the Open Weather Map API url.
+     * @throws Exception basic error or warning information from either the parser or the url connection.
      */
-    private void callWeather() {
-
+    private void callWeather() throws Exception {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser = factory.newSAXParser();
+        saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
     }
 
     /**
@@ -71,6 +82,106 @@ public class WeatherAPI {
      */
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+}
+
+/**
+ * Class reads the XML data stream using SAX Parser.
+ */
+class UserHandler extends DefaultHandler {
+
+    private String cityID, cityName, longitude, latitude, country, timezone, sunrise, sunset, currentTemperature,
+            minimumTemperature, maximumTemperature, feelsLike, humidity, pressure, windSpeed, windName, windGusts,
+            windDirectionValue, windDirectionCode, windDirectionName, cloudyValue, cloudyName, visibility,
+            precipitationMode, weatherNumber, weatherValue, weatherIcon, lastUpdate;
+    private boolean hasCountry, hasTimezone = false;
+
+    /**
+     * Method looks for specific string values in an XML document and then stores their associated values.
+     * @param uri The Namespace URI.
+     * @param localName The local name (without prefix).
+     * @param qName The qualified name (with prefix).
+     * @param attributes The attributes attached to the element.
+     */
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+
+        if (qName.equalsIgnoreCase("city")) {
+            cityID = attributes.getValue("id");
+            cityName = attributes.getValue("name");
+        } else if (qName.equalsIgnoreCase("coord")) {
+            longitude = attributes.getValue("lon");
+            latitude = attributes.getValue("lat");
+        } else if (qName.equalsIgnoreCase("country")) {
+            hasCountry = true;
+        } else if (qName.equalsIgnoreCase("timezone")) {
+            hasTimezone = true;
+        } else if (qName.equalsIgnoreCase("sun")) {
+            sunrise = attributes.getValue("rise");
+            sunset = attributes.getValue("set");
+        } else if (qName.equalsIgnoreCase("temperature")) {
+            currentTemperature = attributes.getValue("value");
+            minimumTemperature = attributes.getValue("min");
+            maximumTemperature = attributes.getValue("max");
+        } else if (qName.equalsIgnoreCase("feels_like")) {
+            feelsLike = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("humidity")) {
+            humidity = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("pressure")) {
+            pressure = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("speed")) {
+            windSpeed = attributes.getValue("value");
+            windName = attributes.getValue("name");
+        } else if (qName.equalsIgnoreCase("gusts")) {
+            windGusts = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("direction")) {
+            windDirectionValue = attributes.getValue("value");
+            windDirectionCode = attributes.getValue("code");
+            windDirectionName = attributes.getValue("name");
+        } else if (qName.equalsIgnoreCase("clouds")) {
+            cloudyValue = attributes.getValue("value");
+            cloudyName = attributes.getValue("name");
+        } else if (qName.equalsIgnoreCase("visibility")) {
+            visibility = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("precipitation")) {
+            precipitationMode = attributes.getValue("mode");
+        } else if (qName.equalsIgnoreCase("weather")) {
+            weatherNumber = attributes.getValue("number");
+            weatherValue = attributes.getValue("value");
+            weatherIcon = attributes.getValue("icon");
+        } else if (qName.equalsIgnoreCase("lastupdate")) {
+            lastUpdate = attributes.getValue("value");
+        }
+    }
+
+    /**
+     * Method reads in commented text in XML for country and timezone.
+     * @param ch The characters.
+     * @param start The start position in the character array.
+     * @param length The number of characters to use from the character array.
+     */
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        if (hasCountry){
+            country = new String(ch, start, length);
+            hasCountry = false;
+        } else if (hasTimezone){
+            timezone = new String(ch, start, length);
+            hasTimezone = false;
+        }
+    }
+
+    /**
+     * Method looks for "current" to know when the end of the document has been reached.
+     * @param uri The Namespace URI.
+     * @param localName The local name (without prefix).
+     * @param qName The qualified name (with prefix).
+     */
+    @Override
+    public void endElement(String uri, String localName, String qName) {
+        if (qName.equalsIgnoreCase("current")) {
+
+        }
     }
 }
 
