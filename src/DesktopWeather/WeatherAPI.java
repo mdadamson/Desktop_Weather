@@ -19,6 +19,7 @@ public class WeatherAPI {
     private String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
+    private Properties weather;
 
     /**
      * Default configuration of weather API. Set zipcode and/or country code for different location. Call update weather
@@ -36,6 +37,7 @@ public class WeatherAPI {
         getWeatherDataByZipCode();
         try {
             callWeather();
+            weather = userHandler.readWeather();
         } catch (Exception e){
             //Some exception message
         }
@@ -95,6 +97,7 @@ class UserHandler extends DefaultHandler {
             windDirectionValue, windDirectionCode, windDirectionName, cloudyValue, cloudyName, visibility,
             precipitationMode, weatherNumber, weatherValue, weatherIcon, lastUpdate;
     private boolean hasCountry, hasTimezone = false;
+    private Properties weather = new Properties();
 
     /**
      * Method looks for specific string values in an XML document and then stores their associated values.
@@ -182,6 +185,47 @@ class UserHandler extends DefaultHandler {
         if (qName.equalsIgnoreCase("current")) {
 
         }
+    }
+    
+    /**
+     * Method assigns all of the stored variables into the Parameter weather.
+     * @return Returns Properties of weather.
+     */
+    public Properties readWeather(){
+        weather.put("cityID", cityID);
+        weather.put("cityName", cityName);
+        weather.put("longitude", longitude);
+        weather.put("latitude", latitude);
+        weather.put("country", country);
+        weather.put("timezone", timezone);
+        weather.put("sunrise", sunrise);
+        weather.put("sunset", sunset);
+        weather.put("currentTemperature", currentTemperature);
+        weather.put("minimumTemperature", minimumTemperature);
+        weather.put("maximumTemperature", maximumTemperature);
+        weather.put("feelsLike", feelsLike);
+        weather.put("humidity", humidity);
+        weather.put("pressure", pressure);
+        weather.put("windSpeed", windSpeed);
+        weather.put("windName", windName);
+        if (weather.get("windGusts") == null){
+            weather.put("windGusts", "");
+        }else {
+            weather.put("windGusts", windGusts);
+        }
+        weather.put("windDirectionValue", windDirectionValue);
+        weather.put("windDirectionCode", windDirectionCode);
+        weather.put("windDirectionName", windDirectionName);
+        weather.put("cloudyValue", cloudyValue);
+        weather.put("cloudyName", cloudyName);
+        weather.put("visibility", visibility);
+        weather.put("precipitationMode", precipitationMode);
+        weather.put("weatherNumber", weatherNumber);
+        weather.put("weatherValue", weatherValue);
+        weather.put("weatherIcon", weatherIcon);
+        weather.put("lastUpdate", lastUpdate);
+
+        return weather;
     }
 }
 
