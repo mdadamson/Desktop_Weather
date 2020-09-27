@@ -1,6 +1,6 @@
 package DesktopWeather;
 
-public class DesktopWeather {
+public class DesktopWeather extends WeatherGUI{
     public static void main(String[] args) {
         WeatherAPI weather = new WeatherAPI();
         weather.updateWeather();
@@ -10,6 +10,8 @@ public class DesktopWeather {
         weather.updateWeather();
         p("Current City Name: " + weather.getCityName());
         p("Current Temperature: " + weather.getTemperature());
+
+        launch(args);
     }
     
     /*
