@@ -6,11 +6,6 @@ public class DesktopWeather extends WeatherGUI{
         weather.updateWeather();
         p("Current City Name: " + weather.getCityName());
         p("Current Temperature: " + weather.getTemperature());
-        weather.setZipCode("10003");
-        weather.updateWeather();
-        p("Current City Name: " + weather.getCityName());
-        p("Current Temperature: " + weather.getTemperature());
-
         launch(args);
     }
     

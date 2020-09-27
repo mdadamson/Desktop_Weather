@@ -17,15 +17,22 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 
 public class WeatherGUI extends Application {
+    //Variables
+    Button enterValue;
+    static TextField zipValue;
+    static TextArea weatherFirst;
+    TextArea weatherSecond;
+    TextArea weatherThird;
+
     public void start (Stage weatherStage) throws Exception {
 
         //Placeholder for BorderPane
         Text rightText = new Text("");
         Text leftText = new Text("");
-        Text bottomText = new Text ("");
 
         //Variables
         Label locationName;
+        Label zipLabel;
         FileInputStream firstImage;
         FileInputStream secondImage;
         FileInputStream thirdImage;
@@ -57,6 +64,16 @@ public class WeatherGUI extends Application {
         TextArea weatherThird;
         //Default location name
         locationName = new Label("New York City, NY");
+        zipLabel = new Label("Enter Zip Code");
+
+        zipValue = new TextField();
+        zipValue.setPromptText("Zip Code");
+        zipValue.setMaxWidth(130);
+
+        enterValue = new Button("Enter");
+
+        HBox inputField = new HBox(10, zipLabel, zipValue, enterValue);
+        inputField.setAlignment(Pos.CENTER);
 
         //TextArea Properties
         weatherFirst = new TextArea();
@@ -92,10 +109,10 @@ public class WeatherGUI extends Application {
         BorderPane.setAlignment(locationName, Pos.TOP_CENTER);
 
         // Set the alignment of the Bottom Text to Center
-        BorderPane.setAlignment(bottomText, Pos.BOTTOM_CENTER);
+        BorderPane.setAlignment(inputField, Pos.BOTTOM_CENTER);
 
         // Create a BorderPane with a Text node in each of the five regions
-        BorderPane root = new BorderPane(weatherView, locationName, rightText, bottomText, leftText);
+        BorderPane root = new BorderPane(weatherView, locationName, rightText, inputField, leftText);
         // Set the Size of the VBox
         root.setPrefSize(700, 400);
         // Set the Style-properties of the BorderPane
@@ -109,5 +126,20 @@ public class WeatherGUI extends Application {
         weatherStage.setTitle("Weather Application");
         // Display the Stage
         weatherStage.show();
+
+        WeatherInput handler = new WeatherInput();
+        //zipValue.setOnAction(handler);
+        enterValue.setOnAction(handler);
+
+        System.out.println(zipValue.getText());
+    }
+    public static String getValueInput() {
+        String zipInput = zipValue.getText();
+        return zipInput;
+    }
+    public static void setValueInput(String value) {
+        weatherFirst.setText(value);
     }
 }
+
+
