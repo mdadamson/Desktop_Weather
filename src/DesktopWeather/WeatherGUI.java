@@ -3,10 +3,7 @@ package DesktopWeather;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -14,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.io.FileInputStream;
 
 public class WeatherGUI extends Application {
@@ -21,8 +20,9 @@ public class WeatherGUI extends Application {
     Button enterValue;
     static TextField zipValue;
     static TextArea weatherFirst;
-    TextArea weatherSecond;
-    TextArea weatherThird;
+    static TextArea weatherSecond;
+    static TextArea weatherThird;
+    static Label locationName;
 
     public void start (Stage weatherStage) throws Exception {
 
@@ -31,7 +31,6 @@ public class WeatherGUI extends Application {
         Text leftText = new Text("");
 
         //Variables
-        Label locationName;
         Label zipLabel;
         FileInputStream firstImage;
         FileInputStream secondImage;
@@ -59,11 +58,8 @@ public class WeatherGUI extends Application {
         thunderView.setFitWidth(170);
 
         //TextArea holding weather data output
-        TextArea weatherFirst;
-        TextArea weatherSecond;
-        TextArea weatherThird;
         //Default location name
-        locationName = new Label("New York City, NY");
+        locationName = new Label();
         zipLabel = new Label("Enter Zip Code");
 
         zipValue = new TextField();
@@ -133,13 +129,26 @@ public class WeatherGUI extends Application {
 
         System.out.println(zipValue.getText());
     }
-    public static String getValueInput() {
+    public static String getZipInput() {
         String zipInput = zipValue.getText();
         return zipInput;
+    }
+    public static void setZipInput() {
+        zipValue.setText("");
     }
     public static void setValueInput(String value) {
         weatherFirst.setText(value);
     }
+    public static void setLabelInput(String value) {
+        locationName.setText(value);
+    }
+    public static void dialogBox (){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Invalid Input");
+        alert.setContentText("Invalid input or zipcode!");
+
+        alert.showAndWait();
+    }
 }
-
-
