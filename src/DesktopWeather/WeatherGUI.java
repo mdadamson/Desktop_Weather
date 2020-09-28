@@ -30,7 +30,7 @@ public class WeatherGUI extends Application {
         Text rightText = new Text("");
         Text leftText = new Text("");
 
-        //Variables
+        //Variables - label for the zipcode, and the weather images
         Label zipLabel;
         FileInputStream firstImage;
         FileInputStream secondImage;
@@ -127,21 +127,26 @@ public class WeatherGUI extends Application {
         //zipValue.setOnAction(handler);
         enterValue.setOnAction(handler);
 
-        System.out.println(zipValue.getText());
+        System.out.println(zipValue.getText()); //can be deleted later, here for testing purposes
     }
+    //retrieve the zip code input from the textfield
     public static String getZipInput() {
         String zipInput = zipValue.getText();
         return zipInput;
     }
+    //set the zip code value to an empty string
     public static void setZipInput() {
         zipValue.setText("");
     }
+    //set the text inside the first text area on the GUI
     public static void setValueInput(String value) {
         weatherFirst.setText(value);
     }
+    //sets the text in the label above the three images
     public static void setLabelInput(String value) {
         locationName.setText(value);
     }
+    //settings for the error message box if user enters invalid zip code input
     public static void dialogBox (){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.initStyle(StageStyle.UTILITY);
