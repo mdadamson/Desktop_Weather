@@ -26,7 +26,7 @@ public class WeatherAPI {
      * to return current weather information.
      */
     public WeatherAPI() {
-        zipCode = "29644";
+        zipCode = "10001";
         countryCode = "us";
     }
 
