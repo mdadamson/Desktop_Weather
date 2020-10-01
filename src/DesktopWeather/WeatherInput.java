@@ -4,13 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 public class WeatherInput implements EventHandler<ActionEvent> {
+    private WeatherAPI weather = new WeatherAPI();
 
     @Override
     public void handle(ActionEvent event){
 
         //Call the GUI after the button is pressed
         WeatherGUI gui = new WeatherGUI();
-        WeatherAPI weather = new WeatherAPI();
         //Get the input from the textfield and set as a string
         String value = gui.getZipInput();
         //takes the user input value and passes it to WeatherAPI.java class

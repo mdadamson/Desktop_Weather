@@ -6,6 +6,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class WeatherAPI {
@@ -15,11 +18,12 @@ public class WeatherAPI {
     private static final String CALL_BY_ZIPCODE = "?zip=";
     private static final String DATA_FORMAT = "&mode=xml";
     private String urlCallAddress;
-    private UserHandler userHandler = new UserHandler();
-    private String temperatureFormat = "&units=imperial";
+    private final UserHandler userHandler = new UserHandler();
+    private final String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
-    private Properties weather;
+    private Properties weather = new Properties();
+    private boolean canUpdate;
 
     /**
      * Default configuration of weather API. Set zipcode and/or country code for different location. Call update weather
@@ -28,19 +32,33 @@ public class WeatherAPI {
     public WeatherAPI() {
         zipCode = "29644";
         countryCode = "us";
+        canUpdate = true;
     }
 
     /**
-     * Method organizes the weather call and test for internet connection.
+     * Method organizes the weather call and timing. The method also test for internet connection.
      */
     public void updateWeather() {
+        LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
+
+        if (localTime.isAfter(getLastUpdateTimeDate().plusMinutes(10))){
+            canUpdate = true;
+        }
+
         getWeatherDataByZipCode();
+
         try {
-            callWeather();
-            weather = userHandler.readWeather();
+            if (canUpdate){
+                callWeather();
+                weather = userHandler.readWeather();
+                canUpdate = false;
+            }else{
+                System.out.println("Information is up to date");
+            }
         } catch (Exception e){
             //Some exception message
         }
+
     }
 
     /**
@@ -101,6 +119,29 @@ public class WeatherAPI {
     public String getCityName() {
     	return weather.getProperty("cityName");
     }
+
+    /**
+     * Method allows externally created objects of this class to retrieve the "lastUpdate" property
+     * from the "weather" Properties object.
+     */
+    public String getLastWeatherUpdate(){return weather.getProperty("lastUpdate");}
+
+    /**
+     * Method retrieves the time and date of the last weather update and returns it as a LocalDateTime in
+     * ISO_LOCAL_DATE_TIME format. If the last update date time is null the current date time is returned.
+     */
+    private LocalDateTime getLastUpdateTimeDate(){
+        LocalDateTime lastUpdateTimeDate;
+        if (weather.isEmpty()){
+            lastUpdateTimeDate = LocalDateTime.now(ZoneOffset.UTC);
+        }else{
+            lastUpdateTimeDate = LocalDateTime.parse(
+                    weather.getProperty("lastUpdate"),
+                    DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }
+        return lastUpdateTimeDate;
+    }
+
 }
 
 /**
