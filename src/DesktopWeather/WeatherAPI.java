@@ -24,6 +24,7 @@ public class WeatherAPI {
     private String countryCode;
     private Properties weather = new Properties();
     private boolean canUpdate;
+    private static LocalDateTime currentTimeDate;
 
     /**
      * Default configuration of weather API. Set zipcode and/or country code for different location. Call update weather
@@ -40,8 +41,7 @@ public class WeatherAPI {
      */
     public void updateWeather() {
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
-
-        if (localTime.isAfter(getLastUpdateTimeDate().plusMinutes(10))){
+        if (localTime.isAfter(currentTimeDate.plusMinutes(10))){
             canUpdate = true;
         }
 
@@ -127,20 +127,16 @@ public class WeatherAPI {
     public String getLastWeatherUpdate(){return weather.getProperty("lastUpdate");}
 
     /**
-     * Method retrieves the time and date of the last weather update and returns it as a LocalDateTime in
-     * ISO_LOCAL_DATE_TIME format. If the last update date time is null the current date time is returned.
+     * Method allows externally created objects of this class to retrieve the "isEmpty" condition
+     * from the "weather" Properties object.
      */
-    private LocalDateTime getLastUpdateTimeDate(){
-        LocalDateTime lastUpdateTimeDate;
-        if (weather.isEmpty()){
-            lastUpdateTimeDate = LocalDateTime.now(ZoneOffset.UTC);
-        }else{
-            lastUpdateTimeDate = LocalDateTime.parse(
-                    weather.getProperty("lastUpdate"),
-                    DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        }
-        return lastUpdateTimeDate;
-    }
+    public Boolean getWeatherIsEmpty(){return weather.isEmpty();}
+
+    /**
+     * Method sets internal LocalDateTime "currentTimeDate" variable of this class to the current time
+     * from the "WeatherTimeDate" Class.
+     */
+    public void setWeatherTimeDate(LocalDateTime input){this.currentTimeDate = input;}
 
 }
 
