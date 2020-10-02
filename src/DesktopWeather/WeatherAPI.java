@@ -49,9 +49,9 @@ public class WeatherAPI {
 
         try {
             if (canUpdate){
+                canUpdate = false;
                 callWeather();
                 weather = userHandler.readWeather();
-                canUpdate = false;
             }else{
                 System.out.println("Information is up to date");
             }
@@ -92,6 +92,9 @@ public class WeatherAPI {
      * @param zipCode 5 digit standard zip code.
      */
     public void setZipCode(String zipCode) {
+        if (!zipCode.equals(this.zipCode)){
+            canUpdate = true;
+        }
         this.zipCode = zipCode;
     }
 
