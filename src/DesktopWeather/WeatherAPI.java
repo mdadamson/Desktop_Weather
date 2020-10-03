@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class WeatherAPI {
@@ -42,7 +41,7 @@ public class WeatherAPI {
 
     /**
      * Method organizes the weather call and timing.
-     * @throws NetworkConnectionExceptions & IOExceptions thrown by call to callWeather() so 
+     * @throws NetworkConnectionException & IOExceptions thrown by call to callWeather() so
      * that they can be handled in the GUI subsystem.
      */
     public void updateWeather() throws IOException, NetworkConnectionException {
@@ -67,8 +66,8 @@ public class WeatherAPI {
      * Method creates and runs the SAX parser to read in XML data from the Open Weather Map API url.
      * Handles exceptions that occur during the creation of the parser or its attempt to process 
      * incoming XML data.
-     * @throws NetworkConnectionExceptions thrown by call to checkNetworkConnection().
-     * @throws IOExceptions thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
+     * @throws NetworkConnectionException thrown by call to checkNetworkConnection().
+     * @throws IOException thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
     private void callWeather() throws IOException, NetworkConnectionException {
     	checkNetworkConnection();
@@ -91,7 +90,7 @@ public class WeatherAPI {
      * connection.
      * Handles exceptions that occur when the JVM attempts to create a thread to execute these
      * instructions or when that thread is interrupted before completing these instructions.
-     * @throws a NetworkConnectionException if an active internet connection is not detected.
+     * @throws NetworkConnectionException if an active internet connection is not detected.
      */
     private void checkNetworkConnection() throws NetworkConnectionException {
     	try {
