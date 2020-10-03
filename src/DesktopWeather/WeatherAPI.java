@@ -1,10 +1,14 @@
 package DesktopWeather;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -37,40 +41,78 @@ public class WeatherAPI {
     }
 
     /**
-     * Method organizes the weather call and timing. The method also test for internet connection.
+     * Method organizes the weather call and timing.
+     * @throws NetworkConnectionExceptions & IOExceptions thrown by call to callWeather() so 
+     * that they can be handled in the GUI subsystem.
      */
-    public void updateWeather() {
+    public void updateWeather() throws IOException, NetworkConnectionException {
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
+        
         if (localTime.isAfter(currentTimeDate.plusMinutes(10))){
             canUpdate = true;
         }
 
         getWeatherDataByZipCode();
 
-        try {
-            if (canUpdate){
-                canUpdate = false;
-                callWeather();
-                weather = userHandler.readWeather();
-            }else{
-                System.out.println("Information is up to date");
-            }
-        } catch (Exception e){
-            //Some exception message
+        if (canUpdate){
+            canUpdate = false;
+            callWeather();
+            weather = userHandler.readWeather();
+        }else{
+            System.out.println("Information is up to date.");
         }
-
     }
 
     /**
      * Method creates and runs the SAX parser to read in XML data from the Open Weather Map API url.
-     * @throws Exception basic error or warning information from either the parser or the url connection.
+     * Handles exceptions that occur during the creation of the parser or its attempt to process 
+     * incoming XML data.
+     * @throws NetworkConnectionExceptions thrown by call to checkNetworkConnection().
+     * @throws IOExceptions thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
-    private void callWeather() throws Exception {
+    private void callWeather() throws IOException, NetworkConnectionException {
+    	checkNetworkConnection();
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        
+        try {
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
+        } catch(SAXException e) {
+        	System.out.println("Unable to parse XML data.");
+        	e.printStackTrace();
+        } catch(ParserConfigurationException e) {
+        	System.out.println("Unable to configure SAX parser.");
+        	e.printStackTrace();
+        }
     }
 
+    /**
+     * Method executes the necessary instructions to check if the user's computer has an active internet
+     * connection.
+     * Handles exceptions that occur when the JVM attempts to create a thread to execute these
+     * instructions or when that thread is interrupted before completing these instructions.
+     * @throws a NetworkConnectionException if an active internet connection is not detected.
+     */
+    private void checkNetworkConnection() throws NetworkConnectionException {
+    	try {
+			Process netConnectionChecker = java.lang.Runtime.getRuntime().exec("ping www.google.com");
+			int threadTermination = netConnectionChecker.waitFor();
+			
+			if(threadTermination == 0) {
+				System.out.println("Network Connection Successful.");
+			}
+			else {
+				throw new NetworkConnectionException();
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to create thread to check network connection.");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			System.out.println("Thread interrupted before network connection check could be completed.");
+			e.printStackTrace();
+		}
+    }
+    
     /**
      * Method builds the URL string using the zip code format.
      */
@@ -113,6 +155,14 @@ public class WeatherAPI {
      */
     public String getTemperature() {
     	return weather.getProperty("currentTemperature");
+    }
+    
+    /**
+     * Method allows externally created objects of this class to retrieve the "hunidity" property
+     * from the "weather" Properties object.
+     */
+    public String getHumidity() {
+    	return weather.getProperty("humidity");
     }
     
     /**
@@ -283,6 +333,19 @@ class UserHandler extends DefaultHandler {
 
         return weather;
     }
+}
+
+/**
+ * This class defines a custom exception that is instantiated in the event that the 
+ * application is unable to establish a connection with the internet.
+ */
+class NetworkConnectionException extends Exception {
+	private static final long serialVersionUID = 1L;
+
+	public NetworkConnectionException() {
+		super("No active internet connection. "
+				+ "Please establish a connection and try again.");
+	}
 }
 
 
