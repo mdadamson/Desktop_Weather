@@ -3,6 +3,8 @@ package DesktopWeather;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.io.IOException;
+
 public class WeatherInput implements EventHandler<ActionEvent> {
     private WeatherAPI weatherAPI = new WeatherAPI();
     private WeatherTimeDate timeDate = new WeatherTimeDate();
@@ -17,7 +19,13 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         //takes the user input value and passes it to WeatherAPI.java class
         timeDate.UpdateTimeDate();
         weatherAPI.setZipCode(value);
-        weatherAPI.updateWeather();
+        try {
+            weatherAPI.updateWeather();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NetworkConnectionException e) {
+            e.printStackTrace();
+        }
         
         
         

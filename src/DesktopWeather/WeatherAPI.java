@@ -313,11 +313,11 @@ class UserHandler extends DefaultHandler {
         weather.put("pressure", pressure);
         weather.put("windSpeed", windSpeed);
         weather.put("windName", windName);
-        if (weather.get("windGusts") == null){
-            weather.put("windGusts", "");
-        }else {
-            weather.put("windGusts", windGusts);
-        }
+//        if (weather.get("windGusts") == null){
+//            weather.put("windGusts", "");
+//        }else {
+//            weather.put("windGusts", windGusts);
+//        }
         weather.put("windDirectionValue", windDirectionValue);
         weather.put("windDirectionCode", windDirectionCode);
         weather.put("windDirectionName", windDirectionName);
