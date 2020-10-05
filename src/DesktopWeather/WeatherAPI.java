@@ -171,6 +171,14 @@ public class WeatherAPI {
     public String getCityName() {
     	return weather.getProperty("cityName");
     }
+    
+    /**
+     * Method allows externally created objects of this class to retrieve the "weatherValue" property
+     * from the "weather" Properties object.
+     */
+    public String getWeatherType() {
+    	return weather.getProperty("weatherValue");
+    }
 
     /**
      * Method allows externally created objects of this class to retrieve the "lastUpdate" property
