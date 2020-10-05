@@ -1,5 +1,7 @@
 package DesktopWeather;
 
+import javafx.scene.control.Alert;
+import javafx.stage.StageStyle;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -70,7 +72,7 @@ public class WeatherAPI {
      * @throws IOException thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
     private void callWeather() throws IOException, NetworkConnectionException {
-    	checkNetworkConnection();
+    	//checkNetworkConnection();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         
         try {
@@ -92,7 +94,7 @@ public class WeatherAPI {
      * instructions or when that thread is interrupted before completing these instructions.
      * @throws NetworkConnectionException if an active internet connection is not detected.
      */
-    private void checkNetworkConnection() throws NetworkConnectionException {
+    void checkNetworkConnection() throws NetworkConnectionException {
     	try {
 			Process netConnectionChecker = java.lang.Runtime.getRuntime().exec("ping www.google.com");
 			int threadTermination = netConnectionChecker.waitFor();

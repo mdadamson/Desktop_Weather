@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class WeatherInput implements EventHandler<ActionEvent> {
     private WeatherAPI weatherAPI = new WeatherAPI();
@@ -22,9 +23,13 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         try {
             weatherAPI.updateWeather();
         } catch (IOException e) {
+            gui.dialogBox();
             e.printStackTrace();
         } catch (NetworkConnectionException e) {
+            System.out.println("No internet connection");
             e.printStackTrace();
+        } catch (NullPointerException e){
+            gui.dialogBox();
         }
         
         

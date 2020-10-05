@@ -156,4 +156,14 @@ public class WeatherGUI extends Application {
 
         alert.showAndWait();
     }
+    //settings for the error message box if the internet connection fails
+    public static void intCheckBox () {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.initStyle(StageStyle.UTILITY);
+        alert.setTitle("Desktop Weather Application");
+        alert.setHeaderText("Not connected to internet!");
+        alert.setContentText("Please check your internet connection!");
+        alert.showAndWait();
+    }
+
 }
