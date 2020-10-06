@@ -29,12 +29,15 @@ public class WeatherGUI extends Application {
     FileInputStream firstImage;
     FileInputStream secondImage;
     FileInputStream thirdImage;
-    Image dayOneImage;
-    Image dayTwoImage;
-    Image dayThreeImage;
-    ImageView dayOne;
-    ImageView dayTwo;
-    ImageView dayThree;
+    static Image dayOneImage;
+    static Image dayTwoImage;
+    static Image dayThreeImage;
+    static ImageView dayOne;
+    static ImageView dayTwo;
+    static ImageView dayThree;
+    String initialDayOne = "file:weather_icons\\icon_sunny.png";
+    String initialDayTwo = "file:weather_icons\\icon_sunny.png";
+    String initialDayThree = "file:weather_icons\\icon_sunny.png";
 
     public void start (Stage weatherStage) throws Exception {
 
@@ -46,24 +49,24 @@ public class WeatherGUI extends Application {
         Label zipLabel;
 
         //Image for weather for first of three day weather forecast
-        firstImage = new FileInputStream("weather_icons\\icon_sunny.png");
-        dayOneImage = new Image(firstImage);
+        //firstImage = new FileInputStream("weather_icons\\icon_sunny.png");
+        dayOneImage = new Image(initialDayOne);
         dayOne = new ImageView();
         dayOne.setImage(dayOneImage);
         dayOne.setFitHeight(170);
         dayOne.setFitWidth(170);
 
         //Image for weather for second of three day weather forecast
-        secondImage = new FileInputStream("weather_icons\\icon_snowy.png");
-        dayTwoImage = new Image(secondImage);
+        //secondImage = new FileInputStream("weather_icons\\icon_snowy.png");
+        dayTwoImage = new Image(initialDayTwo);
         dayTwo = new ImageView();
         dayTwo.setImage(dayTwoImage);
         dayTwo.setFitHeight(170);
         dayTwo.setFitWidth(170);
 
         //Image for weather for third of three day weather forecast
-        thirdImage = new FileInputStream("weather_icons\\icon_lightning_cloudy.png");
-        dayThreeImage = new Image(thirdImage);
+        //thirdImage = new FileInputStream("weather_icons\\icon_lightning_cloudy.png");
+        dayThreeImage = new Image(initialDayThree);
         dayThree = new ImageView();
         dayThree.setImage(dayThreeImage);
         dayThree.setFitHeight(170);
@@ -155,23 +158,47 @@ public class WeatherGUI extends Application {
         zipValue.setText("");
     }
     //set the text inside the first text area on the GUI
-    public static void setValueInput(String value) {
+    public static void setWeatherFirst(String value) {
         weatherFirst.setText(value);
+    }
+    //set the text inside the second text area on the GUI
+    public static void setWeatherSecond(String value) {
+        weatherSecond.setText(value);
+    }
+    //set the text inside the third text area on the GUI
+    public static void setWeatherThird(String value) {
+        weatherThird.setText(value);
     }
     //sets the text in the label above the three images
     public static void setLabelInput(String value) {
         locationName.setText(value);
     }
     //setter for day one Image
-    public void setDayOneImage() throws FileNotFoundException {
+    public void setDayOneImage(String value) {
+        Platform.runLater(() -> {
+                initialDayOne = value;
+                dayOneImage = new Image(initialDayOne);
+                dayOne.setImage(dayOneImage);
+            }
+        );
     }
     //setter for day two Image
     public void setDayTwoImage(String value) {
-        //this.secondImageValue = value;
+        Platform.runLater(() -> {
+                initialDayTwo = value;
+                dayTwoImage = new Image(initialDayTwo);
+                dayTwo.setImage(dayTwoImage);
+            }
+        );
     }
     //setter for day three Image
     public void setDayThreeImage(String value) {
-        //this.thirdImageValue = value;
+        Platform.runLater(() -> {
+                initialDayThree = value;
+                dayThreeImage = new Image(initialDayThree);
+                dayThree.setImage(dayThreeImage);
+            }
+        );
     }
     //settings for the error message box if user enters invalid zip code input
     public static void dialogBox (){
