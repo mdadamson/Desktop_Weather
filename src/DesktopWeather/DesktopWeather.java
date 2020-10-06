@@ -3,6 +3,8 @@ package DesktopWeather;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class DesktopWeather extends WeatherGUI {
     public static void main(String[] args) {
         // Variables
@@ -16,6 +18,14 @@ public class DesktopWeather extends WeatherGUI {
            exception and it will trigger a dialog box letting the user know.
          */
         try {
+            Platform.runLater(() -> {
+                    try {
+                        intAlertBox();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            );
             weatherAPI.checkNetworkConnection();
             noConn = true;
         }

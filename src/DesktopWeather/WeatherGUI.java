@@ -1,6 +1,7 @@
 package DesktopWeather;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -164,6 +165,24 @@ public class WeatherGUI extends Application {
         alert.setHeaderText("Not connected to internet!");
         alert.setContentText("Please check your internet connection!");
         alert.showAndWait();
+    }
+    //settings for the error message box if the internet connection fails
+    public static void intAlertBox () throws InterruptedException {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        //alert.initStyle(StageStyle.UTILITY);
+        alert.setTitle("Desktop Weather Application");
+        alert.setHeaderText("Checking Internet Connection!");
+        alert.setContentText("Please wait!");
+        alert.show();
+        Platform.runLater(() -> {
+                try {
+                    Thread.sleep(3000);
+                    alert.close();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        );
     }
 
 }
