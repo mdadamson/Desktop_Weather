@@ -32,38 +32,6 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         } catch (NullPointerException e){
             gui.dialogBox();
         }
-        
-        
-        
-        /*
-         * A note about handling the exceptions thrown by WeatherAPI.updateWeather():
-         * 
-         *		- There are 2 types of exceptions that should result in a message that
-         *			is displayed to the user. 
-         *				a.If an IOException is caught here, it means an internet connection
-         *				  	was detected but the application couldn't connect to the API.
-         *				b.If a NetworkConnectionException (the custom exception I wrote in 
-         *					WeatherAPI.java) is caught here, it means an internet connection
-         *					was not detected.
-         *			
-         *		- When I set this up, I was thinking the exceptions would be handled 
-         *			something like this, but obviously make any changes necessary:
-		
-		String exceptionMessage;
-
-		try{
-			weatherAPI.updateWeather();
-        } catch (IOException e){
-            exceptionMessage = "Unable to connect to Open Weather API.";
-            ...display exceptionMessage in GUI
-        } catch (NetworkConnectionException e) {
-        	exceptionMessage = e.getMessage();
-        	...display exceptionMessage in GUI
-        }
-        
-		*/
-        
-
 
         //calls the methods in WeatherAPI and then displays them on the GUI
         try {

@@ -19,7 +19,7 @@ import java.util.Properties;
 public class WeatherAPI {
     private static final String API_KEY = "46d3fd23fd73595139bcc963739e3c3b";
     private static final String API_KEY_PHRASE = "&appid=" + API_KEY;
-    private static final String SERVER_NAME = "http://api.openweathermap.org/data/2.5/weather";
+    //private static final String SERVER_NAME = "http://api.openweathermap.org/data/2.5/weather";
     private static final String CALL_BY_ZIPCODE = "?zip=";
     private static final String DATA_FORMAT = "&mode=xml";
     private String urlCallAddress;
@@ -27,7 +27,7 @@ public class WeatherAPI {
     private final String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
-    private Properties weather = new Properties();
+    private Properties currentWeather = new Properties(), forecastWeather = new Properties();
     private boolean canUpdate;
     private static LocalDateTime currentTimeDate;
 
@@ -53,12 +53,16 @@ public class WeatherAPI {
             canUpdate = true;
         }
 
-        getWeatherDataByZipCode();
+        
 
         if (canUpdate){
             canUpdate = false;
+            getWeatherDataByZipCode(false);
             callWeather();
-            weather = userHandler.readWeather();
+            currentWeather = userHandler.readWeather();
+            getWeatherDataByZipCode(true);
+            callWeather();
+            //forecastWeather = forecastHandler.readWeather();
         }else{
             System.out.println("Information is up to date.");
         }
@@ -72,7 +76,6 @@ public class WeatherAPI {
      * @throws IOException thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
     private void callWeather() throws IOException, NetworkConnectionException {
-    	//checkNetworkConnection();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         
         try {
@@ -117,9 +120,18 @@ public class WeatherAPI {
     /**
      * Method builds the URL string using the zip code format.
      */
-    private void getWeatherDataByZipCode() {
-        urlCallAddress = new StringBuilder()
-                .append(SERVER_NAME)
+    private void getWeatherDataByZipCode(boolean isForecast) {
+    	String serverName; 
+    	
+    	if(isForecast) {
+    		serverName = "http://api.openweathermap.org/data/2.5/forecast";
+    	}
+    	else {
+    		serverName = "http://api.openweathermap.org/data/2.5/weather";
+    	}
+    	
+		urlCallAddress = new StringBuilder()
+                .append(serverName)
                 .append(CALL_BY_ZIPCODE)
                 .append(zipCode)
                 .append(",")
@@ -155,7 +167,7 @@ public class WeatherAPI {
      * from the "weather" Properties object.
      */
     public String getTemperature() {
-    	return weather.getProperty("currentTemperature");
+    	return currentWeather.getProperty("currentTemperature");
     }
     
     /**
@@ -163,7 +175,7 @@ public class WeatherAPI {
      * from the "weather" Properties object.
      */
     public String getHumidity() {
-    	return weather.getProperty("humidity");
+    	return currentWeather.getProperty("humidity");
     }
     
     /**
@@ -171,7 +183,7 @@ public class WeatherAPI {
      * from the "weather" Properties object.
      */
     public String getCityName() {
-    	return weather.getProperty("cityName");
+    	return currentWeather.getProperty("cityName");
     }
     
     /**
@@ -179,20 +191,20 @@ public class WeatherAPI {
      * from the "weather" Properties object.
      */
     public String getWeatherType() {
-    	return weather.getProperty("weatherValue");
+    	return currentWeather.getProperty("weatherValue");
     }
 
     /**
      * Method allows externally created objects of this class to retrieve the "lastUpdate" property
      * from the "weather" Properties object.
      */
-    public String getLastWeatherUpdate(){return weather.getProperty("lastUpdate");}
+    public String getLastWeatherUpdate(){return currentWeather.getProperty("lastUpdate");}
 
     /**
      * Method allows externally created objects of this class to retrieve the "isEmpty" condition
      * from the "weather" Properties object.
      */
-    public Boolean getWeatherIsEmpty(){return weather.isEmpty();}
+    public Boolean getWeatherIsEmpty(){return currentWeather.isEmpty();}
 
     /**
      * Method sets internal LocalDateTime "currentTimeDate" variable of this class to the current time
