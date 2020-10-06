@@ -3,6 +3,7 @@ package DesktopWeather;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -66,13 +67,16 @@ public class WeatherInput implements EventHandler<ActionEvent> {
 
         //calls the methods in WeatherAPI and then displays them on the GUI
         try {
-            gui.setValueInput("Current City Name: \n" + weatherAPI.getCityName() + "\nCurrent Temperature: \n" + weatherAPI.getTemperature());
+            gui.setValueInput("Current City Name: " + weatherAPI.getCityName() +
+                    "\nCurrent Temperature: " + weatherAPI.getTemperature()+ "\u00B0" +
+                    "\nCurrent Humidity: " + weatherAPI.getHumidity()+"\u0025");
             gui.setLabelInput(weatherAPI.getCityName() + ", CT"); // can remove CT later - for testing purposes
+            gui.setDayOneImage();
             System.out.println("Current City Name: " + weatherAPI.getCityName()); // can delete these printouts later, used for testing purposes
             System.out.println("Current Temperature: " + weatherAPI.getTemperature() + "\n");
         }
         //invalid inputs throw null pointer exceptions, so when caught, the program displays an error box.
-        catch (NullPointerException e){
+        catch (NullPointerException | FileNotFoundException e){
             System.out.println("Invalid input or zipcode!\n");
             gui.dialogBox();
             gui.setZipInput();

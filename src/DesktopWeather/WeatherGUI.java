@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class WeatherGUI extends Application {
     //Variables
@@ -23,6 +23,17 @@ public class WeatherGUI extends Application {
     static TextArea weatherSecond;
     static TextArea weatherThird;
     static Label locationName;
+    static Label timeDate;
+    WeatherTimeDate timeDateInt = new WeatherTimeDate();
+    FileInputStream firstImage;
+    FileInputStream secondImage;
+    FileInputStream thirdImage;
+    Image dayOneImage;
+    Image dayTwoImage;
+    Image dayThreeImage;
+    ImageView dayOne;
+    ImageView dayTwo;
+    ImageView dayThree;
 
     public void start (Stage weatherStage) throws Exception {
 
@@ -32,34 +43,35 @@ public class WeatherGUI extends Application {
 
         //Variables - label for the zipcode, and the weather images
         Label zipLabel;
-        FileInputStream firstImage;
-        FileInputStream secondImage;
-        FileInputStream thirdImage;
 
         //Image for weather for first of three day weather forecast
         firstImage = new FileInputStream("weather_icons\\icon_sunny.png");
-        Image sunnyDay = new Image(firstImage);
-        ImageView sunnyView = new ImageView(sunnyDay);
-        sunnyView.setFitHeight(170);
-        sunnyView.setFitWidth(170);
+        dayOneImage = new Image(firstImage);
+        dayOne = new ImageView();
+        dayOne.setImage(dayOneImage);
+        dayOne.setFitHeight(170);
+        dayOne.setFitWidth(170);
 
         //Image for weather for second of three day weather forecast
         secondImage = new FileInputStream("weather_icons\\icon_snowy.png");
-        Image snowDay = new Image(secondImage);
-        ImageView snowView = new ImageView(snowDay);
-        snowView.setFitHeight(170);
-        snowView.setFitWidth(170);
+        dayTwoImage = new Image(secondImage);
+        dayTwo = new ImageView();
+        dayTwo.setImage(dayTwoImage);
+        dayTwo.setFitHeight(170);
+        dayTwo.setFitWidth(170);
 
         //Image for weather for third of three day weather forecast
         thirdImage = new FileInputStream("weather_icons\\icon_lightning_cloudy.png");
-        Image thunderDay = new Image(thirdImage);
-        ImageView thunderView = new ImageView(thunderDay);
-        thunderView.setFitHeight(170);
-        thunderView.setFitWidth(170);
+        dayThreeImage = new Image(thirdImage);
+        dayThree = new ImageView();
+        dayThree.setImage(dayThreeImage);
+        dayThree.setFitHeight(170);
+        dayThree.setFitWidth(170);
 
         //TextArea holding weather data output
         //Default location name
         locationName = new Label();
+        timeDate = new Label(timeDateInt.getTimeDate());
         zipLabel = new Label("Enter Zip Code");
 
         zipValue = new TextField();
@@ -74,19 +86,19 @@ public class WeatherGUI extends Application {
         //TextArea Properties
         weatherFirst = new TextArea();
         weatherFirst.setMaxHeight(140);
-        weatherFirst.setMaxWidth(180);
+        weatherFirst.setMaxWidth(250);
         weatherFirst.setEditable(false);
 
         //TextArea Properties
         weatherSecond = new TextArea();
         weatherSecond.setMaxHeight(140);
-        weatherSecond.setMaxWidth(180);
+        weatherSecond.setMaxWidth(250);
         weatherSecond.setEditable(false);
 
         //TextArea Properties
         weatherThird = new TextArea();
         weatherThird.setMaxHeight(140);
-        weatherThird.setMaxWidth(180);
+        weatherThird.setMaxWidth(250);
         weatherThird.setEditable(false);
 
         //Layout container for weather data
@@ -94,23 +106,26 @@ public class WeatherGUI extends Application {
         weatherDisplay.setAlignment(Pos.CENTER);
 
         //Layout container for weather images
-        HBox weatherImage = new HBox(40, sunnyView, snowView, thunderView);
+        HBox weatherImage = new HBox(120, dayOne, dayTwo, dayThree);
         weatherImage.setAlignment(Pos.CENTER);
 
         //Layout container for weather data and images
         VBox weatherView = new VBox(1, weatherImage, weatherDisplay);
         weatherDisplay.setAlignment(Pos.CENTER);
 
+        VBox labelView = new VBox(1, locationName, timeDate);
+        labelView.setAlignment(Pos.CENTER);
+
         // Set the alignment of the Top Text to Center
-        BorderPane.setAlignment(locationName, Pos.TOP_CENTER);
+        BorderPane.setAlignment(labelView, Pos.TOP_CENTER);
 
         // Set the alignment of the Bottom Text to Center
         BorderPane.setAlignment(inputField, Pos.BOTTOM_CENTER);
 
         // Create a BorderPane with a Text node in each of the five regions
-        BorderPane root = new BorderPane(weatherView, locationName, rightText, inputField, leftText);
+        BorderPane root = new BorderPane(weatherView, labelView, rightText, inputField, leftText);
         // Set the Size of the VBox
-        root.setPrefSize(700, 400);
+        root.setPrefSize(900, 450);
         // Set the Style-properties of the BorderPane
         root.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;");
 
@@ -145,6 +160,17 @@ public class WeatherGUI extends Application {
     //sets the text in the label above the three images
     public static void setLabelInput(String value) {
         locationName.setText(value);
+    }
+    //setter for day one Image
+    public void setDayOneImage() throws FileNotFoundException {
+    }
+    //setter for day two Image
+    public void setDayTwoImage(String value) {
+        //this.secondImageValue = value;
+    }
+    //setter for day three Image
+    public void setDayThreeImage(String value) {
+        //this.thirdImageValue = value;
     }
     //settings for the error message box if user enters invalid zip code input
     public static void dialogBox (){

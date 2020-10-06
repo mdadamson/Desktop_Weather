@@ -1,8 +1,11 @@
 package DesktopWeather;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class WeatherTimeDate{
     private WeatherAPI weatherAPI = new WeatherAPI();
@@ -21,5 +24,20 @@ public class WeatherTimeDate{
         }
         System.out.println(timeDate);
         weatherAPI.setWeatherTimeDate(timeDate);
+    }
+
+    public String getTimeDate(){
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+
+        // Date format to string
+        DateTimeFormatter formatterD = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG);
+        String dateNow = date.format(formatterD);
+
+        // Time format to string
+        DateTimeFormatter formatterT = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+        String timeNow = time.format(formatterT);
+
+        return "Time: " + timeNow + "  Date: " + dateNow;
     }
 }
