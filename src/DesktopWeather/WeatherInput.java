@@ -27,9 +27,6 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         } catch (IOException e) {
             gui.dialogBox();
             e.printStackTrace();
-        } catch (NetworkConnectionException e) {
-            System.out.println("No internet connection");
-            e.printStackTrace();
         } catch (NullPointerException e){
             gui.dialogBox();
         }

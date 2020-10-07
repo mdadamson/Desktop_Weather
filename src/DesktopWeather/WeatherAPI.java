@@ -1,7 +1,5 @@
 package DesktopWeather;
 
-import javafx.scene.control.Alert;
-import javafx.stage.StageStyle;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -9,25 +7,27 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class WeatherAPI {
     private static final String API_KEY = "46d3fd23fd73595139bcc963739e3c3b";
     private static final String API_KEY_PHRASE = "&appid=" + API_KEY;
-    //private static final String SERVER_NAME = "http://api.openweathermap.org/data/2.5/weather";
     private static final String CALL_BY_ZIPCODE = "?zip=";
     private static final String DATA_FORMAT = "&mode=xml";
     private String urlCallAddress;
     private final UserHandler userHandler = new UserHandler();
+    private final ForecastHandler forecastHandler = new ForecastHandler();
     private final String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
-    private Properties currentWeather = new Properties(), forecastWeather = new Properties();
+    private Properties currentWeather = new Properties();
+    private Properties forecastWeather = new Properties();
     private boolean canUpdate;
     private static LocalDateTime currentTimeDate;
 
@@ -46,23 +46,21 @@ public class WeatherAPI {
      * @throws NetworkConnectionException & IOExceptions thrown by call to callWeather() so
      * that they can be handled in the GUI subsystem.
      */
-    public void updateWeather() throws IOException, NetworkConnectionException {
+    public void updateWeather() throws IOException {
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
         
         if (localTime.isAfter(currentTimeDate.plusMinutes(10))){
             canUpdate = true;
         }
 
-        
-
         if (canUpdate){
             canUpdate = false;
             getWeatherDataByZipCode(false);
-            callWeather();
+            callWeather(userHandler);
             currentWeather = userHandler.readWeather();
             getWeatherDataByZipCode(true);
-            callWeather();
-            //forecastWeather = forecastHandler.readWeather();
+            callWeather(forecastHandler);
+            forecastWeather = forecastHandler.readWeather();
         }else{
             System.out.println("Information is up to date.");
         }
@@ -75,7 +73,7 @@ public class WeatherAPI {
      * @throws NetworkConnectionException thrown by call to checkNetworkConnection().
      * @throws IOException thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
-    private void callWeather() throws IOException, NetworkConnectionException {
+    private void callWeather(DefaultHandler userHandler) throws IOException{
         SAXParserFactory factory = SAXParserFactory.newInstance();
         
         try {
@@ -121,13 +119,15 @@ public class WeatherAPI {
      * Method builds the URL string using the zip code format.
      */
     private void getWeatherDataByZipCode(boolean isForecast) {
-    	String serverName; 
+    	String serverName, forecastCount;
     	
     	if(isForecast) {
     		serverName = "http://api.openweathermap.org/data/2.5/forecast";
+    		forecastCount = "&cnt=24";
     	}
     	else {
     		serverName = "http://api.openweathermap.org/data/2.5/weather";
+    		forecastCount = "";
     	}
     	
 		urlCallAddress = new StringBuilder()
@@ -138,6 +138,7 @@ public class WeatherAPI {
                 .append(countryCode)
                 .append(DATA_FORMAT)
                 .append(temperatureFormat)
+                .append(forecastCount)
                 .append(API_KEY_PHRASE)
                 .toString();
     }
@@ -220,7 +221,7 @@ public class WeatherAPI {
 class UserHandler extends DefaultHandler {
 
     private String cityID, cityName, longitude, latitude, country, timezone, sunrise, sunset, currentTemperature,
-            minimumTemperature, maximumTemperature, feelsLike, humidity, pressure, windSpeed, windName, windGusts,
+            minimumTemperature, maximumTemperature, feelsLike, humidity, pressure, windSpeed, windName,
             windDirectionValue, windDirectionCode, windDirectionName, cloudyValue, cloudyName, visibility,
             precipitationMode, weatherNumber, weatherValue, weatherIcon, lastUpdate;
     private boolean hasCountry, hasTimezone = false;
@@ -262,8 +263,6 @@ class UserHandler extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("speed")) {
             windSpeed = attributes.getValue("value");
             windName = attributes.getValue("name");
-        } else if (qName.equalsIgnoreCase("gusts")) {
-            windGusts = attributes.getValue("value");
         } else if (qName.equalsIgnoreCase("direction")) {
             windDirectionValue = attributes.getValue("value");
             windDirectionCode = attributes.getValue("code");
@@ -335,11 +334,6 @@ class UserHandler extends DefaultHandler {
         weather.put("pressure", pressure);
         weather.put("windSpeed", windSpeed);
         weather.put("windName", windName);
-//        if (weather.get("windGusts") == null){
-//            weather.put("windGusts", "");
-//        }else {
-//            weather.put("windGusts", windGusts);
-//        }
         weather.put("windDirectionValue", windDirectionValue);
         weather.put("windDirectionCode", windDirectionCode);
         weather.put("windDirectionName", windDirectionName);
@@ -367,6 +361,92 @@ class NetworkConnectionException extends Exception {
 		super("No active internet connection. "
 				+ "Please establish a connection and try again.");
 	}
+}
+
+class ForecastHandler extends DefaultHandler {
+    private Properties weather = new Properties();
+    private String[] temperature = new String[24];
+    private String[] humidity = new String[24];
+    private String[] pressure = new String[24];
+    private String[] precipitation = new String[24];
+    private String[] weatherNumber = new String[24];
+    private String[] weatherName = new String[24];
+    private String[] timeDate = new String[24];
+    private int incremental = 0;
+
+    /**
+     * Method looks for specific string values in an XML document and then stores their associated values.
+     * @param uri The Namespace URI.
+     * @param localName The local name (without prefix).
+     * @param qName The qualified name (with prefix).
+     * @param attributes The attributes attached to the element.
+     */
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        if (qName.equalsIgnoreCase("weatherData")){
+            incremental = 0;
+        } else if(qName.equalsIgnoreCase("time")){
+            timeDate[incremental] = attributes.getValue("from");
+        } else if(qName.equalsIgnoreCase("symbol")){
+            weatherNumber[incremental] = attributes.getValue("number");
+            weatherName[incremental] = attributes.getValue("name");
+        } else if(qName.equalsIgnoreCase("precipitation")){
+            precipitation[incremental] = attributes.getValue("probability");
+        } else if (qName.equalsIgnoreCase("temperature")){
+            temperature[incremental] = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("pressure")){
+            pressure[incremental] = attributes.getValue("value");
+        } else if (qName.equalsIgnoreCase("humidity")){
+            humidity[incremental] = attributes.getValue("value");
+        }
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) {
+        if (qName.equalsIgnoreCase("time")) {
+                incremental++;
+        }
+    }
+
+    public Properties readWeather(){
+        LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDate today = localTime.toLocalDate();
+        LocalDate todayPlusOne = today.plusDays(1);
+        LocalDate todayPlusTwo = today.plusDays(2);
+        float maxTempToday = -1000.0f;
+        float minTempToday = 1000.0f;
+        float maxTempTodayPlusOne = -1000.0f;
+        float minTempTodayPlusOne = 1000.0f;
+        float maxTempTodayPlusTwo = -1000.0f;
+        float minTempTodayPlusTwo = 1000.0f;
+
+
+        for (int i = 0; i < temperature.length; i++) {
+            String tempS = temperature[i];
+            float tempF = Float.parseFloat(tempS);
+            if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(today)){
+                if (tempF > maxTempToday){
+                    maxTempToday = tempF;
+                } else if (tempF < minTempToday){
+                    minTempToday = tempF;
+                }
+            } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
+                if (tempF > maxTempTodayPlusOne){
+                    maxTempTodayPlusOne = tempF;
+                } else if (tempF < minTempTodayPlusOne){
+                    minTempTodayPlusOne = tempF;
+                }
+            } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
+                if (tempF > maxTempTodayPlusTwo){
+                    maxTempTodayPlusTwo = tempF;
+                } else if (tempF < minTempTodayPlusTwo){
+                    minTempTodayPlusTwo = tempF;
+                }
+            }
+        }
+        System.out.println(maxTempToday + " " + maxTempTodayPlusOne + " " + maxTempTodayPlusTwo);
+        return weather;
+    }
 }
 
 
