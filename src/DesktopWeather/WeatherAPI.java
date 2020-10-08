@@ -420,10 +420,11 @@ class ForecastHandler extends DefaultHandler {
         float maxTempTodayPlusTwo = -1000.0f;
         float minTempTodayPlusTwo = 1000.0f;
 
-
+        //Min Max temperature per day
         for (int i = 0; i < temperature.length; i++) {
             String tempS = temperature[i];
             float tempF = Float.parseFloat(tempS);
+
             if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(today)){
                 if (tempF > maxTempToday){
                     maxTempToday = tempF;
@@ -444,7 +445,48 @@ class ForecastHandler extends DefaultHandler {
                 }
             }
         }
-        System.out.println(maxTempToday + " " + maxTempTodayPlusOne + " " + maxTempTodayPlusTwo);
+        weather.put("maxTemperatureTodayPlusOne", maxTempTodayPlusOne);
+        weather.put("maxTemperatureTodayPlusTwo", maxTempTodayPlusTwo);
+        weather.put("minTemperatureTodayPlusOne", minTempTodayPlusOne);
+        weather.put("minTemperatureTodayPlusTwo", minTempTodayPlusTwo);
+
+        //Precipitation chance per day
+        float precipProbabilityToday = 0.0f;
+        float precipProbabilityTodayPlusOne = 0.0f;
+        float precipProbabilityTodayPlusTwo = 0.0f;
+
+        for (int i = 0; i < precipitation.length; i++) {
+            String precipS = precipitation[i];
+            Float precipF = Float.parseFloat(precipS);
+            System.out.println(precipF);
+
+            if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(today)){
+                System.out.println("today");
+                if(precipF > precipProbabilityToday){
+                    precipProbabilityToday = precipF;
+                }
+            }else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
+                System.out.println("Todayplusone");
+                if(precipF > precipProbabilityTodayPlusOne){
+                    precipProbabilityTodayPlusOne = precipF;
+                }
+            }else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
+                System.out.println("todayplustwo");
+                if(precipF > precipProbabilityTodayPlusTwo){
+                    precipProbabilityTodayPlusTwo= precipF;
+                }
+            }
+        }
+
+        weather.put("precipitationChanceToday", precipProbabilityToday);
+        weather.put("precipitationChanceTodayPlusOne", precipProbabilityTodayPlusOne);
+        weather.put("precipitationChanceTodayPlusTwo", precipProbabilityTodayPlusTwo);
+
+        //humidity
+        //pressure
+        //weather number
+        //weather name
+
         return weather;
     }
 }
