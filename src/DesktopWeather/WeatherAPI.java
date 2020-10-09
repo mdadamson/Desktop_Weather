@@ -780,10 +780,10 @@ class ForecastHandler extends DefaultHandler {
 	        }
         }
         
-        int todayPlusOneWeatherNum = 0, todayPlusTwoWeatherNum = 0, 
-        		maxTodayPlusOne = 0, maxTodayPlusOneIndex = 0, 
+        int maxTodayPlusOne = 0, maxTodayPlusOneIndex = 0, 
         		maxTodayPlusTwo = 0, maxTodayPlusTwoIndex = 0;
-        String todayPlusOneWeatherName = null, todayPlusTwoWeatherName = null;
+        String todayPlusOneWeatherName = null, todayPlusTwoWeatherName = null, 
+        		todayPlusOneWeatherNum = null, todayPlusTwoWeatherNum = null;
         
       	for(int i = 0; i < 7; i++) {
       		if(todayPlusOneCounter[i] > maxTodayPlusOne) {
@@ -798,67 +798,67 @@ class ForecastHandler extends DefaultHandler {
       	}
       	
       	if(maxTodayPlusOneIndex == 0) {
-      		todayPlusOneWeatherNum = 211;
+      		todayPlusOneWeatherNum = "211";
       		todayPlusOneWeatherName = "Thunderstorm";
       	}
       	else if(maxTodayPlusOneIndex == 1) {
-      		todayPlusOneWeatherNum = 301;
+      		todayPlusOneWeatherNum = "301";
       		todayPlusOneWeatherName = "Drizzle";
       	}
       	else if(maxTodayPlusOneIndex == 2) {
-      		todayPlusOneWeatherNum = 501;
+      		todayPlusOneWeatherNum = "501";
       		todayPlusOneWeatherName = "Rain";
       	}
       	else if(maxTodayPlusOneIndex == 3) {
-      		todayPlusOneWeatherNum = 601;
+      		todayPlusOneWeatherNum = "601";
       		todayPlusOneWeatherName = "Snow";
       	}
       	else if(maxTodayPlusOneIndex == 4) {
-      		todayPlusOneWeatherNum = 701;
+      		todayPlusOneWeatherNum = "701";
       		todayPlusOneWeatherName = "Mist";
       	}
       	else if(maxTodayPlusOneIndex == 5) {
-      		todayPlusOneWeatherNum = 800;
+      		todayPlusOneWeatherNum = "800";
       		todayPlusOneWeatherName = "Clear Sky";
       	}
       	else if(maxTodayPlusOneIndex == 6) {
-      		todayPlusOneWeatherNum = 801;
+      		todayPlusOneWeatherNum = "801";
       		todayPlusOneWeatherName = "Cloudy";
       	}
       	
       	if(maxTodayPlusTwoIndex == 0) {
-      		todayPlusTwoWeatherNum = 211;
+      		todayPlusTwoWeatherNum = "211";
       		todayPlusTwoWeatherName = "Thunderstorm";
       	}
       	else if(maxTodayPlusTwoIndex == 1) {
-      		todayPlusTwoWeatherNum = 301;
+      		todayPlusTwoWeatherNum = "301";
       		todayPlusTwoWeatherName = "Drizzle";
       	}
       	else if(maxTodayPlusTwoIndex == 2) {
-      		todayPlusTwoWeatherNum = 501;
+      		todayPlusTwoWeatherNum = "501";
       		todayPlusTwoWeatherName = "Rain";
       	}
       	else if(maxTodayPlusTwoIndex == 3) {
-      		todayPlusTwoWeatherNum = 601;
+      		todayPlusTwoWeatherNum = "601";
       		todayPlusTwoWeatherName = "Snow";
       	}
       	else if(maxTodayPlusTwoIndex == 4) {
-      		todayPlusTwoWeatherNum = 701;
+      		todayPlusTwoWeatherNum = "701";
       		todayPlusTwoWeatherName = "Mist";
       	}
       	else if(maxTodayPlusTwoIndex == 5) {
-      		todayPlusTwoWeatherNum = 800;
+      		todayPlusTwoWeatherNum = "800";
       		todayPlusTwoWeatherName = "Clear Sky";
       	}
       	else if(maxTodayPlusTwoIndex == 6) {
-      		todayPlusTwoWeatherNum = 801;
+      		todayPlusTwoWeatherNum = "801";
       		todayPlusTwoWeatherName = "Cloudy";
       	}
         
         weather.put("todayPlusOneWeatherName", todayPlusOneWeatherName);
         weather.put("todayPlusTwoWeatherName", todayPlusTwoWeatherName);
-        weather.put("todayPlusOneWeatherNum", Integer.toString(todayPlusOneWeatherNum));
-        weather.put("todayPlusTwoWeatherNum", Integer.toString(todayPlusTwoWeatherNum));
+        weather.put("todayPlusOneWeatherNum", todayPlusOneWeatherNum);
+        weather.put("todayPlusTwoWeatherNum", todayPlusTwoWeatherNum);
         
         return weather;
     }
