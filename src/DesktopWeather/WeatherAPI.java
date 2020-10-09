@@ -171,12 +171,84 @@ public class WeatherAPI {
     	return currentWeather.getProperty("currentTemperature");
     }
     
+    
+    // temp (min/max) todayPlusOne
+    public String getMinTempTodayPlusOne() {
+    	return forecastWeather.getProperty("minTemperatureTodayPlusOne");
+    }
+    
+    public String getMaxTempTodayPlusOne() {
+    	return forecastWeather.getProperty("maxTemperatureTodayPlusOne");
+    }
+    
+    
+    // temp (min/max) todayPlusTwo
+    public String getMinTempTodayPlusTwo() {
+    	return forecastWeather.getProperty("minTemperatureTodayPlusTwo");
+    }
+    
+    public String getMaxTempTodayPlusTwo() {
+    	return forecastWeather.getProperty("maxTemperatureTodayPlusTwo");
+    }
+    
+    // precip
+    public String getPrecipChanceToday() {
+    	return forecastWeather.getProperty("precipitationChanceToday");
+    }
+    
+    public String getPrecipChanceTodayPlusOne() {
+    	return forecastWeather.getProperty("precipitationChanceTodayPlusOne");
+    }
+    
+    public String getPrecipChanceTodayPlusTwo() {
+    	return forecastWeather.getProperty("precipitationChanceTodayPlusTwo");
+    }
+    
     /**
      * Method allows externally created objects of this class to retrieve the "hunidity" property
      * from the "weather" Properties object.
      */
     public String getHumidity() {
     	return currentWeather.getProperty("humidity");
+    }
+    
+    public String getHumidityTodayPlusOne() {
+    	return forecastWeather.getProperty("maxHumidityTodayPlusOne");
+    }
+    
+    public String getHumidityTodayPlusTwo() {
+    	return forecastWeather.getProperty("maxHumidityTodayPlusTwo");
+    }
+    
+    // pressure
+    public String getPressure() {
+    	return currentWeather.getProperty("pressure");
+    }
+    
+    public String getPressureTodayPlusOne() {
+    	return forecastWeather.getProperty("maxPressureTodayPlusOne");
+    }
+    
+    public String getPressureTodayPlusTwo() {
+    	return forecastWeather.getProperty("maxPressureTodayPlusTwo");
+    }
+    
+    // weather name
+    public String getWeatherNameTodayPlusOne() {
+    	return forecastWeather.getProperty("todayPlusOneWeatherName");
+    }
+    
+    public String getWeatherNameTodayPlusTwo() {
+    	return forecastWeather.getProperty("todayPlusTwoWeatherName");
+    }
+    
+    // weather Number
+    public String getWeatherNumTodayPlusOne() {
+    	return forecastWeather.getProperty("todayPlusOneWeatherNum");
+    }
+    
+    public String getWeatherNumTodayPlusTwo() {
+    	return forecastWeather.getProperty("todayPlusTwoWeatherNum");
     }
     
     /**
@@ -483,10 +555,190 @@ class ForecastHandler extends DefaultHandler {
         weather.put("precipitationChanceTodayPlusTwo", precipProbabilityTodayPlusTwo);
 
         //humidity
+        String humidityS;
+        float humidityF, maxHumidityTodayPlusOne = 0, maxHumidityTodayPlusTwo = 0;
+        
+        for(int i = 0; i < humidity.length; i++) {
+        	humidityS = humidity[i];
+        	humidityF = Float.parseFloat(humidityS);
+        	System.out.println("Humidity: " + humidityF);
+        	
+        	if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
+            	if(humidityF > maxHumidityTodayPlusOne) {
+            		maxHumidityTodayPlusOne = humidityF;
+            	}
+            	System.out.println("maxHumidity todayPlusOne #" + "i: " +  maxHumidityTodayPlusOne);
+            } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
+            	if(humidityF > maxHumidityTodayPlusTwo) {
+            		maxHumidityTodayPlusTwo = humidityF;
+            	}
+            	System.out.println("maxHumidity todayPlusTwo #" + "i: " +  maxHumidityTodayPlusTwo);
+            }
+        }
+        
+        weather.put("maxHumidityTodayPlusOne", maxHumidityTodayPlusOne);
+        weather.put("maxHumidityTodayPlusTwo", maxHumidityTodayPlusTwo);
+        
         //pressure
-        //weather number
-        //weather name
-
+        String pressureS;
+        float pressureF, maxPressureTodayPlusOne = 0, maxPressureTodayPlusTwo = 0;
+        
+        for(int i = 0; i < pressure.length; i++) {
+        	pressureS = pressure[i];
+        	pressureF = Float.parseFloat(pressureS);
+        	System.out.println("Pressure: " + pressureF);
+        	
+	        if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
+	        	if(pressureF > maxPressureTodayPlusOne) {
+	        		maxPressureTodayPlusOne = pressureF;
+	        	}
+	        } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
+	        	if(pressureF > maxPressureTodayPlusOne) {
+	        		maxPressureTodayPlusTwo = pressureF;
+	        	}
+	        }
+        }
+        
+        weather.put("maxPressureTodayPlusOne", maxPressureTodayPlusOne);
+        weather.put("maxPressureTodayPlusTwo", maxPressureTodayPlusTwo);
+        
+        //weather name & weather number
+        String weatherNumS;
+        int weatherNumI;
+        int[] todayPlusOneCounter = {0, 0, 0, 0, 0, 0, 0}, 
+        		todayPlusTwoCounter = {0, 0, 0, 0, 0, 0, 0};
+        
+        for(int i = 0; i < weatherNumber.length; i++) {
+        	weatherNumS = weatherNumber[i];
+        	weatherNumI = Integer.parseInt(weatherNumS);
+        	
+	        if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
+	        	if(weatherNumI >= 200 && weatherNumI <= 232) {
+	    			todayPlusOneCounter[0]++;
+	    		}
+	    		else if(weatherNumI >= 300 && weatherNumI <= 321) {
+	    			todayPlusOneCounter[1]++;
+	    		}
+	    		else if(weatherNumI >= 500 && weatherNumI <= 531) {
+	    			todayPlusOneCounter[2]++;
+	    		}
+	    		else if(weatherNumI >= 600 && weatherNumI <= 622) {
+	    			todayPlusOneCounter[3]++;
+	    		}
+	    		else if(weatherNumI >= 701 && weatherNumI <= 781) {
+	    			todayPlusOneCounter[4]++;
+	    		}
+	    		else if(weatherNumI == 800) {
+	    			todayPlusOneCounter[5]++;
+	    		}
+	    		else if(weatherNumI >= 801 && weatherNumI <= 804) {
+	    			todayPlusOneCounter[6]++;
+	    		}
+	        } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
+	        	if(weatherNumI >= 200 && weatherNumI <= 232) {
+	    			todayPlusTwoCounter[0]++;
+	    		}
+	    		else if(weatherNumI >= 300 && weatherNumI <= 321) {
+	    			todayPlusTwoCounter[1]++;
+	    		}
+	    		else if(weatherNumI >= 500 && weatherNumI <= 531) {
+	    			todayPlusTwoCounter[2]++;
+	    		}
+	    		else if(weatherNumI >= 600 && weatherNumI <= 622) {
+	    			todayPlusTwoCounter[3]++;
+	    		}
+	    		else if(weatherNumI >= 701 && weatherNumI <= 781) {
+	    			todayPlusTwoCounter[4]++;
+	    		}
+	    		else if(weatherNumI == 800) {
+	    			todayPlusTwoCounter[5]++;
+	    		}
+	    		else if(weatherNumI >= 801 && weatherNumI <= 804) {
+	    			todayPlusTwoCounter[6]++;
+	    		}
+	        }
+        }
+        
+        int todayPlusOneWeatherNum = 0, todayPlusTwoWeatherNum = 0, 
+        		maxTodayPlusOne = 0, maxTodayPlusOneIndex = 0, 
+        		maxTodayPlusTwo = 0, maxTodayPlusTwoIndex = 0;
+        String todayPlusOneWeatherName = null, todayPlusTwoWeatherName = null;
+        
+      	for(int i = 0; i < 7; i++) {
+      		if(todayPlusOneCounter[i] > maxTodayPlusOne) {
+      			maxTodayPlusOne = todayPlusOneCounter[i];
+      			maxTodayPlusOneIndex = i;
+      		}
+      		
+      		if(todayPlusTwoCounter[i] > maxTodayPlusTwo) {
+      			maxTodayPlusTwo = todayPlusTwoCounter[i];
+      			maxTodayPlusTwoIndex = i;
+      		}
+      	}
+      	
+      	if(maxTodayPlusOneIndex == 0) {
+      		todayPlusOneWeatherNum = 211;
+      		todayPlusOneWeatherName = "thunderstorm";
+      	}
+      	else if(maxTodayPlusOneIndex == 1) {
+      		todayPlusOneWeatherNum = 301;
+      		todayPlusOneWeatherName = "drizzle";
+      	}
+      	else if(maxTodayPlusOneIndex == 2) {
+      		todayPlusOneWeatherNum = 501;
+      		todayPlusOneWeatherName = "Rain";
+      	}
+      	else if(maxTodayPlusOneIndex == 3) {
+      		todayPlusOneWeatherNum = 601;
+      		todayPlusOneWeatherName = "Snow";
+      	}
+      	else if(maxTodayPlusOneIndex == 4) {
+      		todayPlusOneWeatherNum = 701;
+      		todayPlusOneWeatherName = "Mist";
+      	}
+      	else if(maxTodayPlusOneIndex == 5) {
+      		todayPlusOneWeatherNum = 800;
+      		todayPlusOneWeatherName = "Clear Sky";
+      	}
+      	else if(maxTodayPlusOneIndex == 6) {
+      		todayPlusOneWeatherNum = 801;
+      		todayPlusOneWeatherName = "Cloudy";
+      	}
+      	
+      	if(maxTodayPlusTwoIndex == 0) {
+      		todayPlusTwoWeatherNum = 211;
+      		todayPlusTwoWeatherName = "thunderstorm";
+      	}
+      	else if(maxTodayPlusTwoIndex == 1) {
+      		todayPlusTwoWeatherNum = 301;
+      		todayPlusTwoWeatherName = "drizzle";
+      	}
+      	else if(maxTodayPlusTwoIndex == 2) {
+      		todayPlusTwoWeatherNum = 501;
+      		todayPlusTwoWeatherName = "Rain";
+      	}
+      	else if(maxTodayPlusTwoIndex == 3) {
+      		todayPlusTwoWeatherNum = 601;
+      		todayPlusTwoWeatherName = "Snow";
+      	}
+      	else if(maxTodayPlusTwoIndex == 4) {
+      		todayPlusTwoWeatherNum = 701;
+      		todayPlusTwoWeatherName = "Mist";
+      	}
+      	else if(maxTodayPlusTwoIndex == 5) {
+      		todayPlusTwoWeatherNum = 800;
+      		todayPlusTwoWeatherName = "Clear Sky";
+      	}
+      	else if(maxTodayPlusTwoIndex == 6) {
+      		todayPlusTwoWeatherNum = 801;
+      		todayPlusTwoWeatherName = "Cloudy";
+      	}
+        
+        weather.put("todayPlusOneWeatherName", todayPlusOneWeatherName);
+        weather.put("todayPlusTwoWeatherName", todayPlusTwoWeatherName);
+        weather.put("todayPlusOneWeatherNum", todayPlusOneWeatherNum);
+        weather.put("todayPlusTwoWeatherNum", todayPlusTwoWeatherNum);
+        
         return weather;
     }
 }
