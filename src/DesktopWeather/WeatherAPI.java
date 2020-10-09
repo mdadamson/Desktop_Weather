@@ -3,7 +3,6 @@ package DesktopWeather;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -164,89 +163,181 @@ public class WeatherAPI {
     }
     
     /**
-     * Method allows externally created objects of this class to retrieve the "currentTemperature" property
-     * from the "weather" Properties object.
+     * Method allows externally created objects of this class to retrieve the current temperature.
+     * @return "currentTemperature" String from the currentWeather Properties object.
      */
     public String getTemperature() {
     	return currentWeather.getProperty("currentTemperature");
     }
     
-    
-    // temp (min/max) todayPlusOne
+    /**
+     * The following two methods allow externally created objects of this class to retrieve
+     * the minimum and maximum temperature for the current day plus one and the current
+     * day plus two.
+     * @return "minTemperatureTodayPlusOne" String from the forecastWeather Properties
+     * object.
+     */
     public String getMinTempTodayPlusOne() {
     	return forecastWeather.getProperty("minTemperatureTodayPlusOne");
     }
     
+    /**
+     * @return "maxTemperatureTodayPlusOne" String from the forecastWeather Properties
+     * object.
+     */
     public String getMaxTempTodayPlusOne() {
     	return forecastWeather.getProperty("maxTemperatureTodayPlusOne");
     }
     
-    
-    // temp (min/max) todayPlusTwo
+    /**
+     * The following two methods allow externally created objects of this class to retrieve
+     * the minimum and maximum temperature for the current day plus one and the current
+     * day plus two.
+     * @return "minTemperatureTodayPlusTwo" String from the forecastWeather Properties
+     * object.
+     */
     public String getMinTempTodayPlusTwo() {
     	return forecastWeather.getProperty("minTemperatureTodayPlusTwo");
     }
     
+    /**
+     * @return "maxTemperatureTodayPlusTwo" String from the forecastWeather Properties
+     * object.
+     */
     public String getMaxTempTodayPlusTwo() {
     	return forecastWeather.getProperty("maxTemperatureTodayPlusTwo");
     }
     
-    // precip
+    /**
+     * Method allows externally created objects of this class to retrieve the chance of
+     * precipitation for the current day.
+     * @return "precipitationChanceToday" String from the forecastWeather Properties
+     * object.
+     */
     public String getPrecipChanceToday() {
     	return forecastWeather.getProperty("precipitationChanceToday");
     }
     
+    /**
+     * The following two methods allow externally created objects of this class to retrieve
+     * the chance of precipitation for the current day plus one and the current day plus two.
+     * @return "precipitationChanceTodayPlusOne" String from the forecastWeather
+     * Properties object.
+     */
     public String getPrecipChanceTodayPlusOne() {
     	return forecastWeather.getProperty("precipitationChanceTodayPlusOne");
     }
     
+    /**
+     * @return "precipitationChanceTodayPlusTwo" String from the forecastWeather
+     * Properties object.
+     */
     public String getPrecipChanceTodayPlusTwo() {
     	return forecastWeather.getProperty("precipitationChanceTodayPlusTwo");
     }
     
     /**
-     * Method allows externally created objects of this class to retrieve the "hunidity" property
-     * from the "weather" Properties object.
+     * Method allows externally created objects of this class to retrieve the humidity
+     * for the current day.
+     * @return "humidity" String from the currentWeather Properties object.
      */
     public String getHumidity() {
     	return currentWeather.getProperty("humidity");
     }
     
+    /**
+     * The following two methods allow externally created objects of this class to retrieve
+     * the chance maximum humidity for the current day plus one and the current day plus two.
+     * @return "maxHumidityTodayPlusOne" String from the forecastWeather Properties object.
+     */
     public String getHumidityTodayPlusOne() {
     	return forecastWeather.getProperty("maxHumidityTodayPlusOne");
     }
     
+    /**
+     * @return "maxHumidityTodayPlusTwo" String from the forecastWeather Properties object.
+     */
     public String getHumidityTodayPlusTwo() {
     	return forecastWeather.getProperty("maxHumidityTodayPlusTwo");
     }
     
-    // pressure
+    /**
+     * Method allows externally created objects of this class to retrieve the pressure
+     * for the current day.
+     * @return "pressure" String from the currentWeather Properties object.
+     */
     public String getPressure() {
     	return currentWeather.getProperty("pressure");
     }
     
+    /**
+     * The following two methods allow externally created objects of this class to retrieve
+     * the chance maximum pressure for the current day plus one and the current day plus two.
+     * @return "maxPressureTodayPlusOne" String from the forecastWeather Properties object.
+     */
     public String getPressureTodayPlusOne() {
     	return forecastWeather.getProperty("maxPressureTodayPlusOne");
     }
     
+    /**
+     * @return "maxPressureTodayPlusTwo" String from the forecastWeather Properties object.
+     */
     public String getPressureTodayPlusTwo() {
     	return forecastWeather.getProperty("maxPressureTodayPlusTwo");
     }
     
-    // weather name
+    /**
+     * Method allows externally created objects of this class to retrieve the 
+     * weather type by name for today.
+     * @return "weatherValue" String from currentWeather Properties object.
+     */
+    public String getWeatherName() {
+    	return currentWeather.getProperty("weatherValue");
+    }
+    
+    /**
+     * The following two methods allow externally created objects of this class to
+     * retrieve the weather type by name for the current day plus one and the
+     * current day plus two.
+     * @return "todayPlusOneWeatherName" String from forecastWeather Properties
+     * object.
+     */
     public String getWeatherNameTodayPlusOne() {
     	return forecastWeather.getProperty("todayPlusOneWeatherName");
     }
     
+    /**
+     * @return "todayPlusTwoWeatherName" String from forecastWeather Properties
+     * object.
+     */
     public String getWeatherNameTodayPlusTwo() {
     	return forecastWeather.getProperty("todayPlusTwoWeatherName");
     }
     
-    // weather Number
+    /**
+     * Method allows externally created objects of this class to retrieve the 
+     * weather type by number for today.
+     * @return "weatherNumber" String from currentWeather Properties object.
+     */
+    public String getWeatherNum() {
+    	return currentWeather.getProperty("weatherNumber");
+    }
+    
+    /**
+     * The following two methods allow externally created objects of this class to
+     * retrieve the weather type by number for the current day plus one and the
+     * current day plus two.
+     * @return "todayPlusOneWeatherNum" String from forecastWeather Properties
+     * object.
+     */
     public String getWeatherNumTodayPlusOne() {
     	return forecastWeather.getProperty("todayPlusOneWeatherNum");
     }
     
+    /**
+     * @return "todayPlusTwoWeatherNum" String from forecastWeather Properties
+     * object.
+     */
     public String getWeatherNumTodayPlusTwo() {
     	return forecastWeather.getProperty("todayPlusTwoWeatherNum");
     }
@@ -257,14 +348,6 @@ public class WeatherAPI {
      */
     public String getCityName() {
     	return currentWeather.getProperty("cityName");
-    }
-    
-    /**
-     * Method allows externally created objects of this class to retrieve the "weatherValue" property
-     * from the "weather" Properties object.
-     */
-    public String getWeatherType() {
-    	return currentWeather.getProperty("weatherValue");
     }
 
     /**
@@ -288,7 +371,7 @@ public class WeatherAPI {
 }
 
 /**
- * Class reads the XML data stream using SAX Parser.
+ * Class reads the XML data stream, for the current day, using SAX Parser.
  */
 class UserHandler extends DefaultHandler {
 
@@ -413,6 +496,38 @@ class UserHandler extends DefaultHandler {
         weather.put("cloudyName", cloudyName);
         weather.put("visibility", visibility);
         weather.put("precipitationMode", precipitationMode);
+        
+        int weatherNumI = Integer.parseInt(weatherNumber);
+        
+        if(weatherNumI >= 200 && weatherNumI <= 232) {
+        	weatherNumber = "211";
+        	weatherValue = "Thunderstorm";
+        }
+        else if(weatherNumI >= 300 && weatherNumI <= 321) {
+        	weatherNumber = "301";
+        	weatherValue = "Drizzle";
+        }
+        else if(weatherNumI >= 500 && weatherNumI <= 531) {
+        	weatherNumber = "501";
+        	weatherValue = "Rain";
+        }
+        else if(weatherNumI >= 600 && weatherNumI <= 622) {
+        	weatherNumber = "601";
+        	weatherValue = "Snow";
+        }
+        else if(weatherNumI >= 701 && weatherNumI <= 781) {
+        	weatherNumber = "701";
+        	weatherValue = "Mist";
+        }
+        else if(weatherNumI == 800) {
+        	weatherNumber = "800";
+        	weatherValue = "Clear Sky";
+        }
+        else if(weatherNumI >= 801 && weatherNumI <= 804) {
+        	weatherNumber = "801";
+        	weatherValue = "Cloudy";
+        }
+        
         weather.put("weatherNumber", weatherNumber);
         weather.put("weatherValue", weatherValue);
         weather.put("weatherIcon", weatherIcon);
@@ -435,6 +550,10 @@ class NetworkConnectionException extends Exception {
 	}
 }
 
+/**
+ * Class reads the XML data stream, for the current day plus one and the current day plus
+ * two, using SAX Parser.
+ */
 class ForecastHandler extends DefaultHandler {
     private Properties weather = new Properties();
     private String[] temperature = new String[24];
@@ -473,6 +592,12 @@ class ForecastHandler extends DefaultHandler {
         }
     }
 
+    /**
+     * Method looks for "time" to know when the end of the document has been reached.
+     * @param uri The Namespace URI.
+     * @param localName The local name (without prefix).
+     * @param qName The qualified name (with prefix).
+     */
     @Override
     public void endElement(String uri, String localName, String qName) {
         if (qName.equalsIgnoreCase("time")) {
@@ -480,6 +605,10 @@ class ForecastHandler extends DefaultHandler {
         }
     }
 
+    /**
+     * Method assigns all of the stored variables into the Parameter weather.
+     * @return Returns Properties of weather.
+     */
     public Properties readWeather(){
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
         LocalDate today = localTime.toLocalDate();
@@ -517,10 +646,10 @@ class ForecastHandler extends DefaultHandler {
                 }
             }
         }
-        weather.put("maxTemperatureTodayPlusOne", maxTempTodayPlusOne);
-        weather.put("maxTemperatureTodayPlusTwo", maxTempTodayPlusTwo);
-        weather.put("minTemperatureTodayPlusOne", minTempTodayPlusOne);
-        weather.put("minTemperatureTodayPlusTwo", minTempTodayPlusTwo);
+        weather.put("maxTemperatureTodayPlusOne", Float.toString(maxTempTodayPlusOne));
+        weather.put("maxTemperatureTodayPlusTwo", Float.toString(maxTempTodayPlusTwo));
+        weather.put("minTemperatureTodayPlusOne", Float.toString(minTempTodayPlusOne));
+        weather.put("minTemperatureTodayPlusTwo", Float.toString(minTempTodayPlusTwo));
 
         //Precipitation chance per day
         float precipProbabilityToday = 0.0f;
@@ -530,63 +659,55 @@ class ForecastHandler extends DefaultHandler {
         for (int i = 0; i < precipitation.length; i++) {
             String precipS = precipitation[i];
             Float precipF = Float.parseFloat(precipS);
-            System.out.println(precipF);
 
             if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(today)){
-                System.out.println("today");
                 if(precipF > precipProbabilityToday){
                     precipProbabilityToday = precipF;
                 }
             }else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
-                System.out.println("Todayplusone");
                 if(precipF > precipProbabilityTodayPlusOne){
                     precipProbabilityTodayPlusOne = precipF;
                 }
             }else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
-                System.out.println("todayplustwo");
                 if(precipF > precipProbabilityTodayPlusTwo){
                     precipProbabilityTodayPlusTwo= precipF;
                 }
             }
         }
 
-        weather.put("precipitationChanceToday", precipProbabilityToday);
-        weather.put("precipitationChanceTodayPlusOne", precipProbabilityTodayPlusOne);
-        weather.put("precipitationChanceTodayPlusTwo", precipProbabilityTodayPlusTwo);
+        weather.put("precipitationChanceToday", Float.toString(precipProbabilityToday));
+        weather.put("precipitationChanceTodayPlusOne", Float.toString(precipProbabilityTodayPlusOne));
+        weather.put("precipitationChanceTodayPlusTwo", Float.toString(precipProbabilityTodayPlusTwo));
 
         //humidity
         String humidityS;
         float humidityF, maxHumidityTodayPlusOne = 0, maxHumidityTodayPlusTwo = 0;
         
-        for(int i = 0; i < humidity.length; i++) {
+        for(int i = 8; i < humidity.length; i++) {
         	humidityS = humidity[i];
         	humidityF = Float.parseFloat(humidityS);
-        	System.out.println("Humidity: " + humidityF);
         	
         	if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
             	if(humidityF > maxHumidityTodayPlusOne) {
             		maxHumidityTodayPlusOne = humidityF;
             	}
-            	System.out.println("maxHumidity todayPlusOne #" + "i: " +  maxHumidityTodayPlusOne);
             } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
             	if(humidityF > maxHumidityTodayPlusTwo) {
             		maxHumidityTodayPlusTwo = humidityF;
             	}
-            	System.out.println("maxHumidity todayPlusTwo #" + "i: " +  maxHumidityTodayPlusTwo);
             }
         }
         
-        weather.put("maxHumidityTodayPlusOne", maxHumidityTodayPlusOne);
-        weather.put("maxHumidityTodayPlusTwo", maxHumidityTodayPlusTwo);
+        weather.put("maxHumidityTodayPlusOne", Float.toString(maxHumidityTodayPlusOne));
+        weather.put("maxHumidityTodayPlusTwo", Float.toString(maxHumidityTodayPlusTwo));
         
         //pressure
         String pressureS;
         float pressureF, maxPressureTodayPlusOne = 0, maxPressureTodayPlusTwo = 0;
         
-        for(int i = 0; i < pressure.length; i++) {
+        for(int i = 8; i < pressure.length; i++) {
         	pressureS = pressure[i];
         	pressureF = Float.parseFloat(pressureS);
-        	System.out.println("Pressure: " + pressureF);
         	
 	        if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
 	        	if(pressureF > maxPressureTodayPlusOne) {
@@ -599,8 +720,8 @@ class ForecastHandler extends DefaultHandler {
 	        }
         }
         
-        weather.put("maxPressureTodayPlusOne", maxPressureTodayPlusOne);
-        weather.put("maxPressureTodayPlusTwo", maxPressureTodayPlusTwo);
+        weather.put("maxPressureTodayPlusOne", Float.toString(maxPressureTodayPlusOne));
+        weather.put("maxPressureTodayPlusTwo", Float.toString(maxPressureTodayPlusTwo));
         
         //weather name & weather number
         String weatherNumS;
@@ -608,7 +729,7 @@ class ForecastHandler extends DefaultHandler {
         int[] todayPlusOneCounter = {0, 0, 0, 0, 0, 0, 0}, 
         		todayPlusTwoCounter = {0, 0, 0, 0, 0, 0, 0};
         
-        for(int i = 0; i < weatherNumber.length; i++) {
+        for(int i = 8; i < weatherNumber.length; i++) {
         	weatherNumS = weatherNumber[i];
         	weatherNumI = Integer.parseInt(weatherNumS);
         	
@@ -678,11 +799,11 @@ class ForecastHandler extends DefaultHandler {
       	
       	if(maxTodayPlusOneIndex == 0) {
       		todayPlusOneWeatherNum = 211;
-      		todayPlusOneWeatherName = "thunderstorm";
+      		todayPlusOneWeatherName = "Thunderstorm";
       	}
       	else if(maxTodayPlusOneIndex == 1) {
       		todayPlusOneWeatherNum = 301;
-      		todayPlusOneWeatherName = "drizzle";
+      		todayPlusOneWeatherName = "Drizzle";
       	}
       	else if(maxTodayPlusOneIndex == 2) {
       		todayPlusOneWeatherNum = 501;
@@ -707,11 +828,11 @@ class ForecastHandler extends DefaultHandler {
       	
       	if(maxTodayPlusTwoIndex == 0) {
       		todayPlusTwoWeatherNum = 211;
-      		todayPlusTwoWeatherName = "thunderstorm";
+      		todayPlusTwoWeatherName = "Thunderstorm";
       	}
       	else if(maxTodayPlusTwoIndex == 1) {
       		todayPlusTwoWeatherNum = 301;
-      		todayPlusTwoWeatherName = "drizzle";
+      		todayPlusTwoWeatherName = "Drizzle";
       	}
       	else if(maxTodayPlusTwoIndex == 2) {
       		todayPlusTwoWeatherNum = 501;
@@ -736,8 +857,8 @@ class ForecastHandler extends DefaultHandler {
         
         weather.put("todayPlusOneWeatherName", todayPlusOneWeatherName);
         weather.put("todayPlusTwoWeatherName", todayPlusTwoWeatherName);
-        weather.put("todayPlusOneWeatherNum", todayPlusOneWeatherNum);
-        weather.put("todayPlusTwoWeatherNum", todayPlusTwoWeatherNum);
+        weather.put("todayPlusOneWeatherNum", Integer.toString(todayPlusOneWeatherNum));
+        weather.put("todayPlusTwoWeatherNum", Integer.toString(todayPlusTwoWeatherNum));
         
         return weather;
     }

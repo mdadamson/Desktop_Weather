@@ -2,7 +2,6 @@ package DesktopWeather;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-
 import java.lang.reflect.InvocationTargetException;
 
 public class DesktopWeather extends WeatherGUI {
