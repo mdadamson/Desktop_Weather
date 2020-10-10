@@ -28,7 +28,7 @@ public class WeatherAPI {
     private String countryCode;
     private Properties currentWeather = new Properties();
     private Properties forecastWeather = new Properties();
-    private boolean canUpdate;
+    private boolean canUpdate, startupDefaultWeatherCall = true;
     private static LocalDateTime currentTimeDate;
 
     /**
@@ -46,7 +46,7 @@ public class WeatherAPI {
      * @throws NetworkConnectionException & IOExceptions thrown by call to callWeather() so
      * that they can be handled in the GUI subsystem.
      */
-    public void updateWeather() throws IOException {
+    public void updateWeather() throws IOException, AlreadyUpToDateException {
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
         
         if (localTime.isAfter(currentTimeDate.plusMinutes(10))){
@@ -54,7 +54,13 @@ public class WeatherAPI {
         }
 
         if (canUpdate){
-            canUpdate = false;
+        	if(!startupDefaultWeatherCall) {
+        		canUpdate = false;
+        	}
+        	else {
+        		startupDefaultWeatherCall = false;
+        	}
+            
             getWeatherDataByZipCode(false);
             callWeather(userHandler);
             currentWeather = userHandler.readWeather();
@@ -62,8 +68,16 @@ public class WeatherAPI {
             callWeather(forecastHandler);
             forecastWeather = forecastHandler.readWeather();
         }else{
-            System.out.println("Information is up to date.");
+            throw new AlreadyUpToDateException();
         }
+    }
+    
+    class AlreadyUpToDateException extends Exception{
+		private static final long serialVersionUID = 1L;
+		
+		public AlreadyUpToDateException() {
+			super("Weather information already up to date");
+		}
     }
 
     /**
@@ -80,10 +94,8 @@ public class WeatherAPI {
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
         } catch(SAXException e) {
-        	System.out.println("Unable to parse XML data.");
         	e.printStackTrace();
         } catch(ParserConfigurationException e) {
-        	System.out.println("Unable to configure SAX parser.");
         	e.printStackTrace();
         }
     }
@@ -100,17 +112,13 @@ public class WeatherAPI {
 			Process netConnectionChecker = java.lang.Runtime.getRuntime().exec("ping www.google.com");
 			int threadTermination = netConnectionChecker.waitFor();
 			
-			if(threadTermination == 0) {
-				System.out.println("Network Connection Successful.");
-			}
-			else {
+			if(threadTermination != 0) {
 				throw new NetworkConnectionException();
 			}
+			
 		} catch (IOException e) {
-			System.out.println("Unable to create thread to check network connection.");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			System.out.println("Thread interrupted before network connection check could be completed.");
 			e.printStackTrace();
 		}
     }
@@ -706,25 +714,25 @@ class ForecastHandler extends DefaultHandler {
         
         //pressure
         String pressureS;
-        float pressureF, maxPressureTodayPlusOne = 0, maxPressureTodayPlusTwo = 0;
+        int pressureI, maxPressureTodayPlusOne = 0, maxPressureTodayPlusTwo = 0;
         
         for(int i = 8; i < pressure.length; i++) {
         	pressureS = pressure[i];
-        	pressureF = Float.parseFloat(pressureS);
+        	pressureI = Integer.parseInt(pressureS);
         	
 	        if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusOne)){
-	        	if(pressureF > maxPressureTodayPlusOne) {
-	        		maxPressureTodayPlusOne = pressureF;
+	        	if(pressureI > maxPressureTodayPlusOne) {
+	        		maxPressureTodayPlusOne = pressureI;
 	        	}
 	        } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
-	        	if(pressureF > maxPressureTodayPlusTwo) {
-	        		maxPressureTodayPlusTwo = pressureF;
+	        	if(pressureI > maxPressureTodayPlusTwo) {
+	        		maxPressureTodayPlusTwo = pressureI;
 	        	}
 	        }
         }
         
-        weather.put("maxPressureTodayPlusOne", Float.toString(maxPressureTodayPlusOne));
-        weather.put("maxPressureTodayPlusTwo", Float.toString(maxPressureTodayPlusTwo));
+        weather.put("maxPressureTodayPlusOne", Integer.toString(maxPressureTodayPlusOne));
+        weather.put("maxPressureTodayPlusTwo", Integer.toString(maxPressureTodayPlusTwo));
         
         //weather name & weather number
         String weatherNumS;

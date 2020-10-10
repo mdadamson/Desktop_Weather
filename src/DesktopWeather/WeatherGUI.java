@@ -40,6 +40,7 @@ public class WeatherGUI extends Application {
     String initialDayOne = "file:";
     String initialDayTwo = "file:";
     String initialDayThree = "file:";
+    private static String zipInput;
 
     public void start (Stage weatherStage) throws Exception {
 
@@ -156,11 +157,18 @@ public class WeatherGUI extends Application {
         WeatherInput handler = new WeatherInput();
         // Call to action after user enters input
         enterValue.setOnAction(handler);
+        zipInput = "10001";
+        enterValue.fire();
 
     }
-    // Retrieve the zip code input from the textfield
+    // Retrieve the zip code input from the textfield and store it in
+    // the zipInput String value
+    public void storeZipInput() {
+    	zipInput = zipValue.getText();
+    }
+    
+    // Return the zipInput String value
     public static String getZipInput() {
-        String zipInput = zipValue.getText();
         return zipInput;
     }
     // Set the zip code value to an empty string
@@ -230,6 +238,15 @@ public class WeatherGUI extends Application {
         alert.setHeaderText("Invalid Input");
         alert.setContentText("Invalid input or zipcode!");
 
+        alert.showAndWait();
+    }
+    // Settings for the error message box if user attempts to update before 10 minutes
+    public void upToDateDialogBox() {
+    	Alert alert = new Alert(Alert.AlertType.WARNING);
+    	alert.initStyle(StageStyle.UTILITY);
+    	alert.setTitle("Warning");
+        alert.setHeaderText("Information Already Up To Date");
+        alert.setContentText("Weather can only be updated every 10 minutes!");
         alert.showAndWait();
     }
     // Settings for the error message box if the internet connection fails

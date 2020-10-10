@@ -2,24 +2,41 @@ package DesktopWeather;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+
+import DesktopWeather.WeatherAPI.AlreadyUpToDateException;
 
 public class WeatherInput implements EventHandler<ActionEvent> {
     private WeatherAPI weatherAPI = new WeatherAPI();
     private WeatherTimeDate timeDate = new WeatherTimeDate();
     private WeatherGUI gui = new WeatherGUI();
+    private boolean startupDefaultWeatherCall = true;
 
     @Override
     public void handle(ActionEvent event){
 
         /**
-         * Call the GUI after the button is pressed
-         * Get the input from the textfield and set as a string
+         * If the event being handled is from the manual call that occurs
+         * on startup to get weather information for the default
+         * location, the value of zipInput is returned from the
+         * GUI without attempting to store the input from the GUI's
+         * textField. At that time the returned value of zipInput
+         * will be the zipcode for the default location.
+         * 
+         * All other events will be from button presses performed by the
+         * user. When these occur, text from the textField will be stored
+         * and then returned as the new zipInput value.
          */
-        String value = gui.getZipInput();
+    	if(!startupDefaultWeatherCall) {
+    		gui.storeZipInput();
+    	}
+    	else {
+    		startupDefaultWeatherCall = false;
+    	}
+        
+    	String value = gui.getZipInput();
         //takes the user input value and passes it to WeatherAPI.java class
         timeDate.UpdateTimeDate();
         weatherAPI.setZipCode(value);
@@ -27,9 +44,10 @@ public class WeatherInput implements EventHandler<ActionEvent> {
             weatherAPI.updateWeather();
         } catch (IOException e) {
             gui.dialogBox();
-            e.printStackTrace();
         } catch (NullPointerException e){
             gui.dialogBox();
+        } catch (AlreadyUpToDateException e) {
+        	gui.upToDateDialogBox();
         }
 
         /**
@@ -66,7 +84,6 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         }
         //invalid inputs throw null pointer exceptions, so when caught, the program displays an error box.
         catch (NullPointerException e){
-            System.out.println("Invalid input or zipcode!\n");
             gui.dialogBox();
             gui.setZipInput();
         }
