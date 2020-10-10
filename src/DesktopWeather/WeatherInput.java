@@ -15,8 +15,10 @@ public class WeatherInput implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event){
 
-        //Call the GUI after the button is pressed
-        //Get the input from the textfield and set as a string
+        /**
+         * Call the GUI after the button is pressed
+         * Get the input from the textfield and set as a string
+         */
         String value = gui.getZipInput();
         //takes the user input value and passes it to WeatherAPI.java class
         timeDate.UpdateTimeDate();
@@ -30,7 +32,7 @@ public class WeatherInput implements EventHandler<ActionEvent> {
             gui.dialogBox();
         }
 
-        /*
+        /**
          * Sends string value for current, day one,
          * and day two weather values to the GUI.
          * Calls weather name method and sends to weatherType
@@ -69,7 +71,7 @@ public class WeatherInput implements EventHandler<ActionEvent> {
             gui.setZipInput();
         }
     }
-    /*
+    /**
      * Takes input string value of weather type
      * matches the weather type to icon list
      * returns value of correct icon file
