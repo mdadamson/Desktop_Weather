@@ -23,7 +23,6 @@ public class WeatherAPI {
     private String urlCallAddress;
     private final UserHandler userHandler = new UserHandler();
     private final ForecastHandler forecastHandler = new ForecastHandler();
-    private final String temperatureFormat = "&units=imperial";
     private String zipCode;
     private String countryCode;
     private Properties currentWeather = new Properties();
@@ -43,7 +42,7 @@ public class WeatherAPI {
 
     /**
      * Method organizes the weather call and timing.
-     * @throws NetworkConnectionException & IOExceptions thrown by call to callWeather() so
+     * @throws AlreadyUpToDateException & IOException thrown by call to callWeather() so
      * that they can be handled in the GUI subsystem.
      */
     public void updateWeather() throws IOException, AlreadyUpToDateException {
@@ -72,7 +71,7 @@ public class WeatherAPI {
         }
     }
     
-    class AlreadyUpToDateException extends Exception{
+    static class AlreadyUpToDateException extends Exception{
 		private static final long serialVersionUID = 1L;
 		
 		public AlreadyUpToDateException() {
@@ -84,7 +83,6 @@ public class WeatherAPI {
      * Method creates and runs the SAX parser to read in XML data from the Open Weather Map API url.
      * Handles exceptions that occur during the creation of the parser or its attempt to process 
      * incoming XML data.
-     * @throws NetworkConnectionException thrown by call to checkNetworkConnection().
      * @throws IOException thrown by call to saxParser.parse(new URL(urlCallAddress).openStream(), userHandler)
      */
     private void callWeather(DefaultHandler userHandler) throws IOException{
@@ -93,9 +91,7 @@ public class WeatherAPI {
         try {
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
-        } catch(SAXException e) {
-        	e.printStackTrace();
-        } catch(ParserConfigurationException e) {
+        } catch(SAXException | ParserConfigurationException e) {
         	e.printStackTrace();
         }
     }
@@ -116,9 +112,7 @@ public class WeatherAPI {
 				throw new NetworkConnectionException();
 			}
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
     }
@@ -128,6 +122,7 @@ public class WeatherAPI {
      */
     private void getWeatherDataByZipCode(boolean isForecast) {
     	String serverName, forecastCount;
+        String temperatureFormat = "&units=imperial";
     	
     	if(isForecast) {
     		serverName = "http://api.openweathermap.org/data/2.5/forecast";
@@ -137,18 +132,16 @@ public class WeatherAPI {
     		serverName = "http://api.openweathermap.org/data/2.5/weather";
     		forecastCount = "";
     	}
-    	
-		urlCallAddress = new StringBuilder()
-                .append(serverName)
-                .append(CALL_BY_ZIPCODE)
-                .append(zipCode)
-                .append(",")
-                .append(countryCode)
-                .append(DATA_FORMAT)
-                .append(temperatureFormat)
-                .append(forecastCount)
-                .append(API_KEY_PHRASE)
-                .toString();
+
+        urlCallAddress = serverName +
+                CALL_BY_ZIPCODE +
+                zipCode +
+                "," +
+                countryCode +
+                DATA_FORMAT +
+                temperatureFormat +
+                forecastCount +
+                API_KEY_PHRASE;
     }
 
     /**
@@ -375,7 +368,8 @@ public class WeatherAPI {
      * Method sets internal LocalDateTime "currentTimeDate" variable of this class to the current time
      * from the "WeatherTimeDate" Class.
      */
-    public void setWeatherTimeDate(LocalDateTime input){this.currentTimeDate = input;}
+    public void setWeatherTimeDate(LocalDateTime input){
+        currentTimeDate = input;}
 
 }
 
@@ -389,7 +383,7 @@ class UserHandler extends DefaultHandler {
             windDirectionValue, windDirectionCode, windDirectionName, cloudyValue, cloudyName, visibility,
             precipitationMode, weatherNumber, weatherValue, weatherIcon, lastUpdate;
     private boolean hasCountry, hasTimezone = false;
-    private Properties weather = new Properties();
+    private final Properties weather = new Properties();
 
     /**
      * Method looks for specific string values in an XML document and then stores their associated values.
@@ -464,19 +458,6 @@ class UserHandler extends DefaultHandler {
         }
     }
 
-    /**
-     * Method looks for "current" to know when the end of the document has been reached.
-     * @param uri The Namespace URI.
-     * @param localName The local name (without prefix).
-     * @param qName The qualified name (with prefix).
-     */
-    @Override
-    public void endElement(String uri, String localName, String qName) {
-        if (qName.equalsIgnoreCase("current")) {
-
-        }
-    }
-    
     /**
      * Method assigns all of the stored variables into the Parameter weather.
      * @return Returns Properties of weather.
@@ -564,14 +545,14 @@ class NetworkConnectionException extends Exception {
  * two, using SAX Parser.
  */
 class ForecastHandler extends DefaultHandler {
-    private Properties weather = new Properties();
-    private String[] temperature = new String[24];
-    private String[] humidity = new String[24];
-    private String[] pressure = new String[24];
-    private String[] precipitation = new String[24];
-    private String[] weatherNumber = new String[24];
-    private String[] weatherName = new String[24];
-    private String[] timeDate = new String[24];
+    private final Properties weather = new Properties();
+    private final String[] temperature = new String[24];
+    private final String[] humidity = new String[24];
+    private final String[] pressure = new String[24];
+    private final String[] precipitation = new String[24];
+    private final String[] weatherNumber = new String[24];
+    //private String[] weatherName = new String[24];
+    private final String[] timeDate = new String[24];
     private int incremental = 0;
 
     /**
@@ -589,7 +570,7 @@ class ForecastHandler extends DefaultHandler {
             timeDate[incremental] = attributes.getValue("from");
         } else if(qName.equalsIgnoreCase("symbol")){
             weatherNumber[incremental] = attributes.getValue("number");
-            weatherName[incremental] = attributes.getValue("name");
+            //weatherName[incremental] = attributes.getValue("name");
         } else if(qName.equalsIgnoreCase("precipitation")){
             precipitation[incremental] = attributes.getValue("probability");
         } else if (qName.equalsIgnoreCase("temperature")){
@@ -669,7 +650,7 @@ class ForecastHandler extends DefaultHandler {
 
         for (int i = 0; i < precipitation.length; i++) {
             String precipS = precipitation[i];
-            Float precipF = Float.parseFloat(precipS);
+            float precipF = Float.parseFloat(precipS);
 
             if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(today)){
                 if(precipF > precipProbabilityToday){
