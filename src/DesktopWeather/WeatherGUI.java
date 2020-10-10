@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -159,6 +161,12 @@ public class WeatherGUI extends Application {
         enterValue.setOnAction(handler);
         zipInput = "10001";
         enterValue.fire();
+
+        weatherStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+            if(KeyCode.ESCAPE.equals(event.getCode())){
+                weatherStage.close();
+            }
+        });
 
     }
     // Retrieve the zip code input from the textfield and store it in
