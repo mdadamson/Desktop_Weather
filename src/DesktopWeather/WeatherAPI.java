@@ -35,7 +35,7 @@ public class WeatherAPI {
      * to return current weather information.
      */
     public WeatherAPI() {
-        zipCode = "29644";
+        zipCode = "10001";
         countryCode = "us";
         canUpdate = true;
     }
@@ -479,9 +479,9 @@ class UserHandler extends DefaultHandler {
         weather.put("pressure", pressure);
         weather.put("windSpeed", windSpeed);
         weather.put("windName", windName);
-        weather.put("windDirectionValue", windDirectionValue);
-        weather.put("windDirectionCode", windDirectionCode);
-        weather.put("windDirectionName", windDirectionName);
+        //weather.put("windDirectionValue", windDirectionValue);
+        //weather.put("windDirectionCode", windDirectionCode);
+        //weather.put("windDirectionName", windDirectionName);
         weather.put("cloudyValue", cloudyValue);
         weather.put("cloudyName", cloudyName);
         weather.put("visibility", visibility);
