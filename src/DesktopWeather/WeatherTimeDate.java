@@ -22,7 +22,6 @@ public class WeatherTimeDate{
                     weatherAPI.getLastWeatherUpdate(),
                     DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         }
-        System.out.println(timeDate);
         weatherAPI.setWeatherTimeDate(timeDate);
     }
     // Method returns local time and date formatted
@@ -46,9 +45,9 @@ public class WeatherTimeDate{
 
         // Date format to string
         DateTimeFormatter formatterD = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-        String dateNowPlusOne = date.plusDays(1).format(formatterD);
+        String dateNow = date.format(formatterD);
 
-        return "Date: " + dateNowPlusOne;
+        return "Date: " + dateNow;
     }
     // Method returns day two local date short form
     public String getDayTwo(){
@@ -56,9 +55,9 @@ public class WeatherTimeDate{
 
         // Date format to string
         DateTimeFormatter formatterD = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-        String dateNowPlusTwo = date.plusDays(2).format(formatterD);
+        String dateNowPlusOne = date.plusDays(1).format(formatterD);
 
-        return "Date: " + dateNowPlusTwo;
+        return "Date: " + dateNowPlusOne;
     }
     // Method returns day three local date short form
     public String getDayThree(){
@@ -66,8 +65,8 @@ public class WeatherTimeDate{
 
         // Date format to string
         DateTimeFormatter formatterD = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-        String dateNow = date.format(formatterD);
+        String dateNowPlusTwo = date.plusDays(2).format(formatterD);
 
-        return "Date: " + dateNow;
+        return "Date: " + dateNowPlusTwo;
     }
 }

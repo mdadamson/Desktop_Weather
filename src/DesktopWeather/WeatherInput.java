@@ -39,30 +39,30 @@ public class WeatherInput implements EventHandler<ActionEvent> {
          * method to send over correct file type for icon
          */
         try {
-            gui.setWeatherFirst( "Temperature: " + weatherAPI.getTemperature()+ "\u00B0" +
-                    "\nPrecipitation: " + weatherAPI.getPrecipChanceToday()+ "\u0025" +
-                    "\nHumidity: " + weatherAPI.getHumidity()+ "\u0025" +
-                    "\nPressure: " + weatherAPI.getPressure()+ " mbar" +
-                    "\nWeather Type: " + weatherAPI.getWeatherName());
+            gui.setWeatherFirst( "Temperature: " + weatherAPI.getTemperature() + "\u00B0" +
+                    "\nPrecipitation: " + weatherAPI.getPrecipChanceToday() +
+                    "\nHumidity: " + weatherAPI.getHumidity() + "\u0025" +
+                    "\nPressure: " + weatherAPI.getPressure() + " mbar");
             gui.setDayOneImage(weatherType(weatherAPI.getWeatherName()));
 
             gui.setWeatherSecond( "Temperature Max: " + weatherAPI.getMaxTempTodayPlusOne()+ "\u00B0" +
-                    "\nTemperature Min: " + weatherAPI.getMinTempTodayPlusOne()+ "\u00B0" +
-                    "\nPrecipitation: " + weatherAPI.getPrecipChanceTodayPlusOne()+ "\u0025" +
-                    "\nHumidity: " + weatherAPI.getHumidityTodayPlusOne()+ "\u0025" +
-                    "\nPressure: " + weatherAPI.getPressureTodayPlusOne()+ " mbar" +
-                    "\nWeather Type: " + weatherAPI.getWeatherNameTodayPlusOne());
+                    "\nTemperature Min: " + weatherAPI.getMinTempTodayPlusOne() + "\u00B0" +
+                    "\nPrecipitation: " + weatherAPI.getPrecipChanceTodayPlusOne() +
+                    "\nHumidity: " + weatherAPI.getHumidityTodayPlusOne() + "\u0025" +
+                    "\nPressure: " + weatherAPI.getPressureTodayPlusOne() + " mbar");
             gui.setDayTwoImage(weatherType(weatherAPI.getWeatherNameTodayPlusOne()));
 
             gui.setWeatherThird( "Temperature Max: " + weatherAPI.getMaxTempTodayPlusTwo()+ "\u00B0" +
-                    "\nTemperature Min: " + weatherAPI.getMinTempTodayPlusTwo()+ "\u00B0" +
-                    "\nPrecipitation: " + weatherAPI.getPrecipChanceTodayPlusTwo()+ "\u0025" +
-                    "\nHumidity: " + weatherAPI.getHumidityTodayPlusTwo()+ "\u0025" +
-                    "\nPressure: " + weatherAPI.getPressureTodayPlusTwo()+ " mbar" +
-                    "\nWeather Type: " + weatherAPI.getWeatherNameTodayPlusTwo());
+                    "\nTemperature Min: " + weatherAPI.getMinTempTodayPlusTwo() + "\u00B0" +
+                    "\nPrecipitation: " + weatherAPI.getPrecipChanceTodayPlusTwo() +
+                    "\nHumidity: " + weatherAPI.getHumidityTodayPlusTwo() + "\u0025" +
+                    "\nPressure: " + weatherAPI.getPressureTodayPlusTwo() + " mbar");
             gui.setDayThreeImage(weatherType(weatherAPI.getWeatherNameTodayPlusTwo()));
 
             gui.setLabelInput(weatherAPI.getCityName());
+            gui.setWeatherOne(weatherAPI.getWeatherName());
+            gui.setWeatherTwo(weatherAPI.getWeatherNameTodayPlusOne());
+            gui.setWeatherThree(weatherAPI.getWeatherNameTodayPlusTwo());
         }
         //invalid inputs throw null pointer exceptions, so when caught, the program displays an error box.
         catch (NullPointerException e){

@@ -8,6 +8,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -655,6 +656,8 @@ class ForecastHandler extends DefaultHandler {
         float precipProbabilityToday = 0.0f;
         float precipProbabilityTodayPlusOne = 0.0f;
         float precipProbabilityTodayPlusTwo = 0.0f;
+        NumberFormat defaultFormat = NumberFormat.getPercentInstance();
+        defaultFormat.setMinimumFractionDigits(1);
 
         for (int i = 0; i < precipitation.length; i++) {
             String precipS = precipitation[i];
@@ -675,9 +678,9 @@ class ForecastHandler extends DefaultHandler {
             }
         }
 
-        weather.put("precipitationChanceToday", Float.toString(precipProbabilityToday));
-        weather.put("precipitationChanceTodayPlusOne", Float.toString(precipProbabilityTodayPlusOne));
-        weather.put("precipitationChanceTodayPlusTwo", Float.toString(precipProbabilityTodayPlusTwo));
+        weather.put("precipitationChanceToday", defaultFormat.format(precipProbabilityToday));
+        weather.put("precipitationChanceTodayPlusOne", defaultFormat.format(precipProbabilityTodayPlusOne));
+        weather.put("precipitationChanceTodayPlusTwo", defaultFormat.format(precipProbabilityTodayPlusTwo));
 
         //humidity
         String humidityS;
@@ -714,7 +717,7 @@ class ForecastHandler extends DefaultHandler {
 	        		maxPressureTodayPlusOne = pressureF;
 	        	}
 	        } else if (LocalDateTime.parse(timeDate[i],DateTimeFormatter.ISO_LOCAL_DATE_TIME).toLocalDate().equals(todayPlusTwo)){
-	        	if(pressureF > maxPressureTodayPlusOne) {
+	        	if(pressureF > maxPressureTodayPlusTwo) {
 	        		maxPressureTodayPlusTwo = pressureF;
 	        	}
 	        }
