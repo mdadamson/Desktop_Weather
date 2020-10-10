@@ -1,34 +1,31 @@
 package DesktopWeather;
 
+import DesktopWeather.WeatherAPI.AlreadyUpToDateException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
-import DesktopWeather.WeatherAPI.AlreadyUpToDateException;
+import java.io.IOException;
 
 public class WeatherInput implements EventHandler<ActionEvent> {
-    private WeatherAPI weatherAPI = new WeatherAPI();
-    private WeatherTimeDate timeDate = new WeatherTimeDate();
-    private WeatherGUI gui = new WeatherGUI();
+    private final WeatherAPI weatherAPI = new WeatherAPI();
+    private final WeatherTimeDate timeDate = new WeatherTimeDate();
+    private final WeatherGUI gui = new WeatherGUI();
     private boolean startupDefaultWeatherCall = true;
 
+    /**
+     * If the event being handled is from the manual call that occurs
+     * on startup to get weather information for the default
+     * location, the value of zipInput is returned from the
+     * GUI without attempting to store the input from the GUI's
+     * textField. At that time the returned value of zipInput
+     * will be the zipcode for the default location.
+     *
+     * All other events will be from button presses performed by the
+     * user. When these occur, text from the textField will be stored
+     * and then returned as the new zipInput value.
+     **/
     @Override
     public void handle(ActionEvent event){
-
-        /**
-         * If the event being handled is from the manual call that occurs
-         * on startup to get weather information for the default
-         * location, the value of zipInput is returned from the
-         * GUI without attempting to store the input from the GUI's
-         * textField. At that time the returned value of zipInput
-         * will be the zipcode for the default location.
-         * 
-         * All other events will be from button presses performed by the
-         * user. When these occur, text from the textField will be stored
-         * and then returned as the new zipInput value.
-         */
     	if(!startupDefaultWeatherCall) {
     		gui.storeZipInput();
     	}
@@ -42,19 +39,18 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         weatherAPI.setZipCode(value);
         try {
             weatherAPI.updateWeather();
-        } catch (IOException e) {
-            gui.dialogBox();
-        } catch (NullPointerException e){
+        } catch (IOException | NullPointerException e) {
             gui.dialogBox();
         } catch (AlreadyUpToDateException e) {
         	gui.upToDateDialogBox();
         }
 
-        /**
-         * Sends string value for current, day one,
-         * and day two weather values to the GUI.
-         * Calls weather name method and sends to weatherType
-         * method to send over correct file type for icon
+        /*
+          Sends string value for current, day one,
+          and day two weather values to the GUI.
+          Calls weather name method and sends to weatherType
+          method to send over correct file type for icon
+          @throws NullPointerException if not zipcode is provided
          */
         try {
             gui.setWeatherFirst( "Temperature: " + weatherAPI.getTemperature() + "\u00B0" +
