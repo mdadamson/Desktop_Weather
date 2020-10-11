@@ -1,6 +1,7 @@
 package DesktopWeather;
 
 import DesktopWeather.WeatherAPI.AlreadyUpToDateException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -43,6 +44,11 @@ public class WeatherInput implements EventHandler<ActionEvent> {
             gui.dialogBox();
         } catch (AlreadyUpToDateException e) {
         	gui.upToDateDialogBox();
+        } catch (NetworkConnectionException e) {
+            Platform.runLater(() -> {
+                        gui.intCheckBox();
+                    }
+            );
         }
 
         /*

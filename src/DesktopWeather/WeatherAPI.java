@@ -45,7 +45,7 @@ public class WeatherAPI {
      * @throws AlreadyUpToDateException & IOException thrown by call to callWeather() so
      * that they can be handled in the GUI subsystem.
      */
-    public void updateWeather() throws IOException, AlreadyUpToDateException {
+    public void updateWeather() throws IOException, AlreadyUpToDateException, NetworkConnectionException {
         LocalDateTime localTime = LocalDateTime.now(ZoneOffset.UTC);
         
         if (localTime.isAfter(currentTimeDate.plusMinutes(10))){
@@ -53,13 +53,14 @@ public class WeatherAPI {
         }
 
         if (canUpdate){
+            checkNetworkConnection();
         	if(!startupDefaultWeatherCall) {
         		canUpdate = false;
         	}
         	else {
         		startupDefaultWeatherCall = false;
         	}
-            
+
             getWeatherDataByZipCode(false);
             callWeather(userHandler);
             currentWeather = userHandler.readWeather();
@@ -89,8 +90,8 @@ public class WeatherAPI {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         
         try {
-        SAXParser saxParser = factory.newSAXParser();
-        saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
+            SAXParser saxParser = factory.newSAXParser();
+            saxParser.parse(new URL(urlCallAddress).openStream(), userHandler);
         } catch(SAXException | ParserConfigurationException e) {
         	e.printStackTrace();
         }
