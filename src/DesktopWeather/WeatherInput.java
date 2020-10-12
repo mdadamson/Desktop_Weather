@@ -4,7 +4,6 @@ import DesktopWeather.WeatherAPI.AlreadyUpToDateException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
 import java.io.IOException;
 
 public class WeatherInput implements EventHandler<ActionEvent> {
@@ -99,28 +98,28 @@ public class WeatherInput implements EventHandler<ActionEvent> {
         String weatherType;
         switch (value) {
             case "Thunderstorm":
-                weatherType = "file:weather_icons\\icon_lightning_cloudy.png";
+                weatherType = "/weather_icons/icon_lightning_cloudy.png";
                 break;
             case "Drizzle":
-                weatherType = "file:weather_icons\\icon_drip.png";
+                weatherType = "/weather_icons/icon_drip.png";
                 break;
             case "Rain":
-                weatherType = "file:weather_icons\\icon_raining.png";
+                weatherType = "/weather_icons/icon_raining.png";
                 break;
             case "Snow":
-                weatherType = "file:weather_icons\\icon_snowing.png";
+                weatherType = "/weather_icons/icon_snowing.png";
                 break;
             case "Mist":
-                weatherType = "file:weather_icons\\icon_foggy_cloud.png";
+                weatherType = "/weather_icons/icon_foggy_cloud.png";
                 break;
             case "Clear Sky":
-                weatherType = "file:weather_icons\\icon_sunny.png";
+                weatherType = "/weather_icons/icon_sunny.png";
                 break;
             case "Cloudy":
-                weatherType = "file:weather_icons\\icon_cloudy.png";
+                weatherType = "/weather_icons/icon_cloudy.png";
                 break;
             default:
-                weatherType = "file:weather_icons\\icon_windy.png";
+                weatherType = "/weather_icons/icon_windy.png";
         }
         return weatherType;
     }

@@ -215,7 +215,7 @@ public class WeatherGUI extends Application {
     public void setDayOneImage(String imageFile) {
         Platform.runLater(() -> {
                 initialDayOne = imageFile;
-                dayOneImage = new Image(initialDayOne);
+                dayOneImage = new Image(getClass().getResourceAsStream(imageFile));
                 dayOne.setImage(dayOneImage);
             }
         );
@@ -224,7 +224,7 @@ public class WeatherGUI extends Application {
     public void setDayTwoImage(String imageFile) {
         Platform.runLater(() -> {
                 initialDayTwo = imageFile;
-                dayTwoImage = new Image(initialDayTwo);
+                dayTwoImage = new Image(getClass().getResourceAsStream(imageFile));
                 dayTwo.setImage(dayTwoImage);
             }
         );
@@ -233,7 +233,7 @@ public class WeatherGUI extends Application {
     public void setDayThreeImage(String imageFile) {
         Platform.runLater(() -> {
                 initialDayThree = imageFile;
-                dayThreeImage = new Image(initialDayThree);
+                dayThreeImage = new Image(getClass().getResourceAsStream(imageFile));
                 dayThree.setImage(dayThreeImage);
             }
         );
